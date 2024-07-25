@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "category_restaurant")
+@Table(name = "restaurant_category")
 @Data
 public class RestaurantCategory {
 	@Id

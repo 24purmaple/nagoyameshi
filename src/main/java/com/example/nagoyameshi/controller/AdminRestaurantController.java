@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.nagoyameshi.entity.Restaurant;
 import com.example.nagoyameshi.form.RestaurantEditForm;
 import com.example.nagoyameshi.form.RestaurantRegisterForm;
+import com.example.nagoyameshi.repository.CategoryRepository;
 import com.example.nagoyameshi.repository.RestaurantRepository;
 import com.example.nagoyameshi.service.RestaurantService;
 
@@ -31,10 +32,12 @@ import com.example.nagoyameshi.service.RestaurantService;
 public class AdminRestaurantController {
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantService restaurantService;
+	private final CategoryRepository categoryRepository;//カテゴリ
 	
-	public AdminRestaurantController(RestaurantRepository restaurantRepository, RestaurantService restaurantService) {
+	public AdminRestaurantController(RestaurantRepository restaurantRepository, RestaurantService restaurantService, CategoryRepository categoryRepository) {
 		this.restaurantRepository = restaurantRepository;
 		this.restaurantService = restaurantService;
+		this.categoryRepository = categoryRepository;
 	}
 	
 	//店舗一覧
@@ -91,11 +94,6 @@ public class AdminRestaurantController {
 		Restaurant restaurant = restaurantRepository.getReferenceById(id);
 		String imageName = restaurant.getImageName();
 		
-		/*Integer categoryId = null;
-		if(!restaurant.getRestaurantsCategory().isEmpty()) {
-			categoryId = restaurant.getRestaurantsCategory().iterator().next().getCategory().getCategoryId();
-		}*/
-		
 		List<Integer> categoryIds =restaurant.getRestaurantsCategory().stream()
 				.map(rc -> rc.getCategory().getId())
 				.collect(Collectors.toList());
@@ -118,14 +116,16 @@ public class AdminRestaurantController {
 				);
 		model.addAttribute("imageName", imageName);
 		model.addAttribute("restaurantEditForm", restaurantEditForm);
+		model.addAttribute("categories", categoryRepository.findAll());// カテゴリ一覧を追加
 		
 		return "admin/restaurants/edit";
 	}
 	
 	//店舗更新（編集結果）
 	@PostMapping("/{id}/update")
-	public String update(@ModelAttribute @Validated RestaurantEditForm restaurantEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public String update(@ModelAttribute @Validated RestaurantEditForm restaurantEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("categories", categoryRepository.findAll());// カテゴリ一覧を再追加
 			return "admin/restaurants/edit";
 		}
 		
