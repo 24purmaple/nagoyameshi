@@ -2,6 +2,7 @@ package com.example.nagoyameshi.form;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -11,12 +12,24 @@ import lombok.Data;
 @Data
 public class ReservationInputForm {
 	@NotBlank(message = "予約したい日を選択してください。")
-	private LocalDate reservationDate;
+	private String reservationDate;
 	
 	@NotBlank(message = "来店する時間を選択してください。")
-	private LocalTime reservationTime;//LocalTimeかInteger
+	private String reservationTime;
 	
 	@NotNull(message = "人数を入力してください。")
 	@Min(value = 1, message = "人数は1人以上に設定してください。")
 	private Integer numberOfPeople;
+	
+	// 予約日を取得する
+    public LocalDate getParsedReservationDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(reservationDate, formatter);
+    }
+
+    // 予約時間を取得する
+    public LocalTime getParsedReservationTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return LocalTime.parse(reservationTime, formatter);
+    }
 }

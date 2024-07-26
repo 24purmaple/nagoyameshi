@@ -97,8 +97,8 @@ public class ReservationController {
 		User user = userDetailsImpl.getUser();
 		
 		// 予約日と来店時間を取得する
-		LocalDate reservationDate = reservationInputForm.getReservationDate();
-		LocalTime reservationTime = reservationInputForm.getReservationTime();
+		LocalDate reservationDate = reservationInputForm.getParsedReservationDate();
+		LocalTime reservationTime = reservationInputForm.getParsedReservationTime();
 		
 		ReservationRegisterForm reservationRegisterForm = new ReservationRegisterForm(restaurant.getId(), user.getId(), reservationDate, reservationTime, reservationInputForm.getNumberOfPeople());
 		
