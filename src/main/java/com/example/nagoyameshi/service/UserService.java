@@ -80,4 +80,19 @@ public class UserService {
 	public void delete(User user) {
 		userRepository.delete(user);
 	}
+	
+
+	//サブスク用に追加
+	public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Transactional
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+	public Role findRoleByRoleName(String roleName) {
+		return roleRepository.findByRoleName(roleName);
+	}
 }

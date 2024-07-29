@@ -1,6 +1,7 @@
 package com.example.nagoyameshi.entity;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,4 +52,10 @@ public class User {
 	
 	@Column(name = "updated_at", insertable = false, updatable = false)
 	private Timestamp updatedAt;
+	
+	@Column(name = "subscription_start_date")
+	private LocalDate subscriptionStartDate;
+    
+	@Column(name = "subscription_END_date")
+    private LocalDate subscriptionEndDate;
 }
