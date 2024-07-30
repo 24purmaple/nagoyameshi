@@ -1,5 +1,8 @@
 package com.example.nagoyameshi.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +13,9 @@ import com.example.nagoyameshi.form.SignupForm;
 import com.example.nagoyameshi.form.UserEditForm;
 import com.example.nagoyameshi.repository.RoleRepository;
 import com.example.nagoyameshi.repository.UserRepository;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
 
 @Service
 public class UserService {
@@ -95,4 +101,34 @@ public class UserService {
 	public Role findRoleByRoleName(String roleName) {
 		return roleRepository.findByRoleName(roleName);
 	}
+
+	public User findByStripeCustomerId(String stripeCustomerId) {
+		return userRepository.findByStripeCustomerId(stripeCustomerId);
+	}
+	
+	public User registerUser(User user) {
+        // ユーザーをデータベースに保存する前に、Stripe顧客を作成
+        String stripeCustomerId = createStripeCustomer(user);
+        user.setStripeCustomerId(stripeCustomerId);
+        
+        // ユーザーをデータベースに保存
+        return userRepository.save(user);
+    }
+    
+    private String createStripeCustomer(User user) {
+        // Stripe APIを使用して顧客を作成
+        Stripe.apiKey = "your-stripe-api-key";
+        
+        Map<String, Object> params = new HashMap<>();
+        params.put("email", user.getEmail());
+        params.put("name", user.getUserName());
+        
+        try {
+            Customer customer = Customer.create(params);
+            return customer.getId();
+        } catch (StripeException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Stripe顧客の作成に失敗しました");
+        }
+    }
 }

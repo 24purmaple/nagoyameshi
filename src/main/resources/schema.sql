@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     subscription_start_date DATE,
     subscription_end_date DATE,
+    ALTER TABLE users ADD COLUMN stripe_customer_id VARCHAR(255),
 	FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 

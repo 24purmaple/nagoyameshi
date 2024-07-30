@@ -4,11 +4,11 @@ INSERT IGNORE INTO roles (id, role_name) VALUES (2, 'ROLE_MEMBER');
 INSERT IGNORE INTO roles (id, role_name) VALUES (3, 'ROLE_ADMIN');
 
 -- usersテーブル
-INSERT IGNORE INTO users (id, role_id, user_name, furigana, email, phone_number, password, enabled, subscription_start_date, subscription_end_date) VALUES (1, 1, '侍 義勝', 'サムライ ヨシカツ', 'yoshikatsu.samurai@example.com', '090-1234-5678', 'password', false, NULL, NULL );
-INSERT IGNORE INTO users (id, role_id, user_name, furigana, email, phone_number, password, enabled, subscription_start_date, subscription_end_date) VALUES (2, 1, '侍 幸美', 'サムライ サチミ', 'sachimi.samurai@example.com', '090-1234-5678', 'password', false, NULL, NULL );
-INSERT IGNORE INTO users (id, role_id, user_name, furigana, email, phone_number, password, enabled, subscription_start_date, subscription_end_date) VALUES (3, 1, '侍 雅', 'サムライ ミヤビ', 'miyabi.samurai@example.com', '090-1234-5678', 'password', false, NULL, NULL );
-INSERT IGNORE INTO users (id, role_id, user_name, furigana, email, phone_number, password, enabled, subscription_start_date, subscription_end_date) VALUES (4, 1, '侍 正保', 'サムライ マサヤス', 'masayasu.samurai@example.com', '090-1234-5678', 'password', 'FREE', NULL, NULL );
-INSERT IGNORE INTO users (id, role_id, user_name, furigana, email, phone_number, password, enabled, subscription_start_date, subscription_end_date) VALUES (5, 1, '侍 真由美', 'mayumi.samurai@example.com', 'サムライ マユミ','090-1234-5678', 'password', false, 'FREE', NULL, NULL );
+INSERT IGNORE INTO users (id, role_id, user_name, furigana, email, phone_number, password, enabled, subscription_start_date, subscription_end_date, stripe_customer_id) VALUES (1, 1, '侍 義勝', 'サムライ ヨシカツ', 'yoshikatsu.samurai@example.com', '090-1234-5678', 'password', false, NULL, NULL, NULL );
+INSERT IGNORE INTO users (id, role_id, user_name, furigana, email, phone_number, password, enabled, subscription_start_date, subscription_end_date, stripe_customer_id) VALUES (2, 1, '侍 幸美', 'サムライ サチミ', 'sachimi.samurai@example.com', '090-1234-5678', 'password', false, NULL, NULL, NULL );
+INSERT IGNORE INTO users (id, role_id, user_name, furigana, email, phone_number, password, enabled, subscription_start_date, subscription_end_date, stripe_customer_id) VALUES (3, 1, '侍 雅', 'サムライ ミヤビ', 'miyabi.samurai@example.com', '090-1234-5678', 'password', false, NULL, NULL, NULL );
+INSERT IGNORE INTO users (id, role_id, user_name, furigana, email, phone_number, password, enabled, subscription_start_date, subscription_end_date, stripe_customer_id) VALUES (4, 1, '侍 正保', 'サムライ マサヤス', 'masayasu.samurai@example.com', '090-1234-5678', 'password', 'FREE', NULL, NULL, NULL );
+INSERT IGNORE INTO users (id, role_id, user_name, furigana, email, phone_number, password, enabled, subscription_start_date, subscription_end_date, stripe_customer_id) VALUES (5, 1, '侍 真由美', 'mayumi.samurai@example.com', 'サムライ マユミ','090-1234-5678', 'password', false, 'FREE', NULL, NULL, NULL );
 
 -- restaurantsテーブル
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (1, 'SAMURAIの宿', 'restaurant01.jpg', '最寄り駅から徒歩10分。自然豊かで閑静な場所にあります。長期滞在も可能です。', 500, 2000, 10, '08:00:00', '20:00:00', '月曜日', '073-0145', '北海道砂川市西五条南X-XX-XX', '012-345-678');

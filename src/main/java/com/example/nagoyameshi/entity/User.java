@@ -58,4 +58,6 @@ public class User {
     
 	@Column(name = "subscription_END_date")
     private LocalDate subscriptionEndDate;
+	
+	private String stripeCustomerId;
 }
