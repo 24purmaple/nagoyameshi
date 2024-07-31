@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.nagoyameshi.entity.Subscription;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.service.UserService;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
 import com.stripe.model.Invoice;
-import com.stripe.model.Subscription;
 import com.stripe.net.Webhook;
 
 @RestController
@@ -33,33 +33,55 @@ public class WebhookController {
 
         Event event = null;
         try {
+        	// Stripeから送信されたイベントを検証して構築
             event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
         } catch (SignatureVerificationException e) {
+        	// イベントの検証が失敗した場合、400 Bad Requestを返す
             return ResponseEntity.badRequest().build();
         }
-
+        // イベントのタイプが「invoice.payment_succeeded」の場合の処理
         if ("invoice.payment_succeeded".equals(event.getType())) {
+        	// 請求書の支払いが成功した場合の処理
             Invoice invoice = (Invoice) event.getDataObjectDeserializer().getObject().orElse(null);
             if (invoice != null) {
-                String customerId = invoice.getCustomer();
-                User user = userService.findByStripeCustomerId(customerId);
-                if (user != null) {
-                    user.setSubscriptionStartDate(LocalDate.now());
-                    user.setSubscriptionEndDate(LocalDate.now().plusMonths(1));
-                    user.setRole(userService.findRoleByRoleName("ROLE_MEMBER"));
-                    userService.save(user);
+            	// 請求書を支払った顧客のIDを取得
+                String stripeCustomerId = invoice.getCustomer();
+                // 顧客IDを元に、データベースからユーザーを検索
+                Subscription subscription = userService.findSubscriptionByStripeCustomerId(stripeCustomerId);                
+                if (subscription != null) {
+                	// ユーザーのサブスクリプションの開始と終了日を更新
+                    subscription.setSubscriptionStartDate(LocalDate.now());
+                    subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(1));
+                    userService.saveSubscription(subscription);
+                    
+                    User user = subscription.getUser();
+                    if(user != null) {
+                    	user.setRole(userService.findRoleByRoleName("ROLE_MEMBER"));
+                        userService.save(user);
+                    }
                 }
             }
         } else if ("customer.subscription.deleted".equals(event.getType())) {
-            Subscription subscription = (Subscription) event.getDataObjectDeserializer().getObject().orElse(null);
-            if (subscription != null) {
-                String customerId = subscription.getCustomer();
-                User user = userService.findByStripeCustomerId(customerId);
-                if (user != null) {
-                    user.setSubscriptionStartDate(null);
-                    user.setSubscriptionEndDate(null);
+        	// サブスクリプションが削除された場合の処理
+        	// イベントタイプが「customer.subscription.deleted」かどうかを確認
+        	// イベントからサブスクリプションオブジェクトを取得
+        	com.stripe.model.Subscription stripeSubscription = (com.stripe.model.Subscription) event.getDataObjectDeserializer().getObject().orElse(null);
+            if (stripeSubscription != null) {
+            	// サブスクリプションを削除された顧客のIDを取得
+                String stripeCustomerId = stripeSubscription.getCustomer();
+                // 顧客IDを元に、データベースからユーザーを検索
+                Subscription subscription = userService.findSubscriptionByStripeCustomerId(stripeCustomerId);
+                if (subscription != null) {
+                	// ユーザーのサブスクリプションの開始と終了日をnullに戻し、ロールを一般ユーザーに変更
+                	subscription.setSubscriptionStartDate(null);
+                	subscription.setSubscriptionEndDate(null);
+                	userService.saveSubscription(subscription);
+                	
+                	User user = subscription.getUser();
+                    if(user != null) {
                     user.setRole(userService.findRoleByRoleName("ROLE_GENERAL"));
                     userService.save(user);
+                    }
                 }
             }
         }

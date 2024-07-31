@@ -45,8 +45,28 @@
 								 <a class="nav-link" th:href="@{/signup}">会員登録</a>
 							 </li>
 						 
-							 <!-- ログイン済みであれば表示する -->
+							 <!-- 会員（ROLE_GENERAL）であれば表示する -->
 							 <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_GENERAL')">
+								 <a id="navbarDropdownGeneral" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+									 <span sec:authentication="principal.user.name"></span>
+								 </a>	 
+							 
+								 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownGeneral">
+									 <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/user}">会員情報</a>
+									 <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/histories}">履歴一覧</a>
+									 
+									 <div class="dropdown-divider"></div>
+									 
+									 <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/subscription/register}">有料プラン登録</a>
+									 <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+										 ログアウト
+									 </a>
+									 <form class="d-none" id="logout-form" th:action="@{/logout}" method="post"></form>
+								 </div>
+							 </li>
+							 
+							 <!-- 会員（ROLE_MEMBER）であれば表示する -->
+							 <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_MEMBER')">
 								 <a id="navbarDropdownGeneral" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
 									 <span sec:authentication="principal.user.name"></span>
 								 </a>	 
@@ -59,6 +79,7 @@
 									 
 									 <div class="dropdown-divider"></div>
 									 
+									 <a class="dropdown-item nagoyameshi-dropdown-item" href="#">有料プラン解約</a><!--有料プラン解約ページを作成する-->
 									 <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 										 ログアウト
 									 </a>
@@ -66,7 +87,7 @@
 								 </div>
 							 </li>
 							 
-							 <!-- 管理者であれば表示する -->
+							 <!-- 管理者（ROLE_ADMIN）であれば表示する -->
 							 <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
 								 <a id="navbarDropdownAdmin" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
 									管理者メニュー

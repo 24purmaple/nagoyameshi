@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.nagoyameshi.entity.Role;
+import com.example.nagoyameshi.entity.Subscription;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.SignupForm;
 import com.example.nagoyameshi.form.UserEditForm;
 import com.example.nagoyameshi.repository.RoleRepository;
+import com.example.nagoyameshi.repository.SubscriptionRepository;
 import com.example.nagoyameshi.repository.UserRepository;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -21,12 +23,14 @@ import com.stripe.model.Customer;
 public class UserService {
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
+	private final SubscriptionRepository subscriptionRepository;
 	private final PasswordEncoder passwordEncoder;
 	
 	//↓コンストラクタ
-	public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+	public UserService(UserRepository userRepository, RoleRepository roleRepository, SubscriptionRepository subscriptionRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;	//←フィールド
 		this.roleRepository = roleRepository;
+		this.subscriptionRepository = subscriptionRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
 	
@@ -89,28 +93,30 @@ public class UserService {
 	
 
 	//サブスク用に追加
-	public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-
     @Transactional
     public void save(User user) {
         userRepository.save(user);
     }
+    
+    @Transactional
+	public void saveSubscription(Subscription subscription) {
+		subscriptionRepository.save(subscription);
+	}
 
 	public Role findRoleByRoleName(String roleName) {
 		return roleRepository.findByRoleName(roleName);
 	}
 
-	public User findByStripeCustomerId(String stripeCustomerId) {
-		return userRepository.findByStripeCustomerId(stripeCustomerId);
-	}
+	public Subscription findSubscriptionByStripeCustomerId(String stripeCustomerId) {
+        return subscriptionRepository.findByStripeCustomerId(stripeCustomerId);
+    }
 	
 	public User registerUser(User user) {
         // ユーザーをデータベースに保存する前に、Stripe顧客を作成
         String stripeCustomerId = createStripeCustomer(user);
-        user.setStripeCustomerId(stripeCustomerId);
-        
+        Subscription subscription = new Subscription();
+        subscription.setStripeCustomerId(stripeCustomerId);
+        user.setSubscription(subscription);
         // ユーザーをデータベースに保存
         return userRepository.save(user);
     }
@@ -131,4 +137,5 @@ public class UserService {
             throw new RuntimeException("Stripe顧客の作成に失敗しました");
         }
     }
+
 }

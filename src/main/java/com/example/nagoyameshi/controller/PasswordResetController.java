@@ -34,7 +34,7 @@ public class PasswordResetController {
         } else {
             model.addAttribute("error", "メールアドレスが見つかりませんでした。");
         }
-        return "reset_password_request";
+        return "request_password";
     }
     
     @PostMapping("/reset_password")
@@ -44,9 +44,11 @@ public class PasswordResetController {
         boolean result = passwordResetService.resetPassword(token, password);
         if (result) {
             model.addAttribute("message", "パスワードがリセットされました。");
+            return "redirect:/";//リセット成功でトップページへ
         } else {
             model.addAttribute("error", "トークンが無効または期限切れです。");
+            return "reset_password";//リセットに失敗で同じページの再表示
         }
-        return "reset_password";
+        
     }
 }

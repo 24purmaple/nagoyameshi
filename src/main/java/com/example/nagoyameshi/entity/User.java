@@ -1,8 +1,8 @@
 package com.example.nagoyameshi.entity;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -53,11 +54,7 @@ public class User {
 	@Column(name = "updated_at", insertable = false, updatable = false)
 	private Timestamp updatedAt;
 	
-	@Column(name = "subscription_start_date")
-	private LocalDate subscriptionStartDate;
-    
-	@Column(name = "subscription_END_date")
-    private LocalDate subscriptionEndDate;
-	
-	private String stripeCustomerId;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "subscription_id", referencedColumnName = "id")
+    private Subscription subscription;
 }
