@@ -83,9 +83,10 @@ public class SubscriptionController {
     	User user = userDetailsImpl.getUser();
     	
     	if (user != null) {
-    		stripeService.cancelSubscription(user);
     		Subscription subscription = user.getSubscription();
     		if(subscription != null) {
+    			stripeService.cancelSubscription(subscription.getStripeSubscriptionId());
+    		
     			subscription.setSubscriptionStartDate(null);
     			subscription.setSubscriptionEndDate(null);
     			userService.saveSubscription(subscription);
@@ -94,5 +95,5 @@ public class SubscriptionController {
     		userService.save(user); // ユーザーのサブスクリプション情報を更新
     	}
     	return "redirect:/";
-    }    
+    }
 }

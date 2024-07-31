@@ -7,7 +7,6 @@ import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.SubscriptionForm;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.Subscription;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 
@@ -62,7 +61,7 @@ public class StripeService {
 	// サブスクリプションをキャンセルするメソッド
     public void cancelSubscription(String subscriptionId) {
         try {
-            Subscription subscription = Subscription.retrieve(subscriptionId);
+        	com.stripe.model.Subscription subscription = com.stripe.model.Subscription.retrieve(subscriptionId);
             subscription.cancel();
         } catch (StripeException e) {
             e.printStackTrace();

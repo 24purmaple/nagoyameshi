@@ -16,7 +16,7 @@ public class Subscription {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer id;// データベース上でサブスクリプションを識別するためのID
 	
 	@Column(name = "subscription_start_date")
 	private LocalDate subscriptionStartDate;
@@ -24,7 +24,8 @@ public class Subscription {
 	@Column(name = "subscription_END_date")
     private LocalDate subscriptionEndDate;
 	
-	private String stripeCustomerId;
+	private String stripeCustomerId;// Stripeで顧客を識別するためのID
+	private String stripeSubscriptionId; // Stripeでサブスクリプションを識別するためのID
 	
 	@OneToOne(mappedBy = "subscription")
     private User user;
