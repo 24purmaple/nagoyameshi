@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.nagoyameshi.entity.Subscription;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.SubscriptionForm;
 import com.example.nagoyameshi.security.UserDetailsImpl;
@@ -80,17 +81,18 @@ public class SubscriptionController {
     @PostMapping("/cancel")
     public String cancelSubscription(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
     	User user = userDetailsImpl.getUser();
+    	
     	if (user != null) {
     		stripeService.cancelSubscription(user);
-    		//エラー解決案
-    		//1.Userエンティティにフィールドを追加する
-    		//2.サブスクリプションIDの取得: cancelSubscription メソッド内で、User エンティティからサブスクリプションIDを取得する
-    		//3.サービスクラスでの操作: stripeService.cancelSubscription() メソッド内で、受け取ったサブスクリプションIDを使ってStripeのAPIを呼び出し、キャンセル操作を行う
-    		user.setSubscriptionStartDate(null);
-    		user.setSubscriptionEndDate(null);
+    		Subscription subscription = user.getSubscription();
+    		if(subscription != null) {
+    			subscription.setSubscriptionStartDate(null);
+    			subscription.setSubscriptionEndDate(null);
+    			userService.saveSubscription(subscription);
+    		}
     		user.setRole(userService.findRoleByRoleName("ROLE_GENERAL"));//ROLE_GENERALに戻す
     		userService.save(user); // ユーザーのサブスクリプション情報を更新
     	}
-    	return "redirect:/subscription/canceled";
+    	return "redirect:/";
     }    
 }
