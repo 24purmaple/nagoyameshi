@@ -24,7 +24,10 @@ public class Subscription {
 	@Column(name = "subscription_END_date")
     private LocalDate subscriptionEndDate;
 	
+	@Column(name = "stripe_customer_id")
 	private String stripeCustomerId;// Stripeで顧客を識別するためのID
+	
+	@Column(name = "stripe_subscription_id")
 	private String stripeSubscriptionId; // Stripeでサブスクリプションを識別するためのID
 	
 	@OneToOne(mappedBy = "subscription")

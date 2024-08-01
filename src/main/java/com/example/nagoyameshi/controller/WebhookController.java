@@ -15,6 +15,7 @@ import com.example.nagoyameshi.service.UserService;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
 import com.stripe.model.Invoice;
+import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
 
 @RestController
@@ -39,9 +40,32 @@ public class WebhookController {
         	// イベントの検証が失敗した場合、400 Bad Requestを返す
             return ResponseEntity.badRequest().build();
         }
-        // イベントのタイプが「invoice.payment_succeeded」の場合の処理
-        if ("invoice.payment_succeeded".equals(event.getType())) {
-        	// 請求書の支払いが成功した場合の処理
+        // checkout.session.completed イベントの処理
+        //セッションからサブスクリプションIDと顧客IDを取得し、データベースのサブスクリプションとユーザーを更新
+        if ("checkout.session_completed".equals(event.getType())) {
+        	Session session = (Session) event.getDataObjectDeserializer().getObject().orElse(null);
+            if (session != null) {
+            	String stripeSubscriptionId = session.getSubscription();// セッションからサブスクリプションIDを取得
+            	String stripeCustomerId = session.getCustomer();// セッションから顧客IDを取得
+                // 顧客IDを元に、データベースからユーザーを検索
+                Subscription subscription = userService.findSubscriptionByStripeCustomerId(stripeCustomerId);                
+                if (subscription != null) {
+                	subscription.setStripeSubscriptionId(stripeSubscriptionId);// サブスクリプションIDを設定
+                	// ユーザーのサブスクリプションの開始と終了日を更新
+                    subscription.setSubscriptionStartDate(LocalDate.now());
+                    subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(1));
+                    userService.saveSubscription(subscription);
+                    
+                    User user = subscription.getUser();
+                    if(user != null) {
+                    	user.setRole(userService.findRoleByRoleName("ROLE_MEMBER"));
+                        userService.save(user);
+                    }
+                }
+            }
+        // invoice.payment_succeeded イベントの処理
+        } else if ("invoice.payment_succeeded".equals(event.getType())) {
+        	// 請求書の支払いが成功した場合に上と同様の処理
             Invoice invoice = (Invoice) event.getDataObjectDeserializer().getObject().orElse(null);
             if (invoice != null) {
             	// 請求書を支払った顧客のIDを取得
@@ -61,9 +85,9 @@ public class WebhookController {
                     }
                 }
             }
+         // customer.subscription.deletedイベントの処理
         } else if ("customer.subscription.deleted".equals(event.getType())) {
         	// サブスクリプションが削除された場合の処理
-        	// イベントタイプが「customer.subscription.deleted」かどうかを確認
         	// イベントからサブスクリプションオブジェクトを取得
         	com.stripe.model.Subscription stripeSubscription = (com.stripe.model.Subscription) event.getDataObjectDeserializer().getObject().orElse(null);
             if (stripeSubscription != null) {
