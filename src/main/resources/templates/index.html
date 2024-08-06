@@ -5,7 +5,7 @@
 		
 		<div th:replace="~{fragment :: styles}"></div>
          
-         <title>民宿一覧</title>
+         <title>店舗一覧</title>
 	</head>
 	<body>
 		<div class="nagoyameshi-wrapper">
@@ -29,7 +29,7 @@
 					<div class="d-flex justify-content-center"> 
 						<form method="get" th:action="@{/restaurants}" class="mb-5 nagoyameshi-search-form">
 							<div class="input-group">
-								<input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="民宿名・目的地">
+								<input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="店舗名">
 								<button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">検索</button>
 							</div>
 						</form>

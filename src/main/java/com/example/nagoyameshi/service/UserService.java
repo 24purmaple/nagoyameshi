@@ -114,8 +114,12 @@ public class UserService {
 	public User registerUser(User user) {
         // ユーザーをデータベースに保存する前に、Stripe顧客を作成
         String stripeCustomerId = createStripeCustomer(user);
+        // 新しいサブスクリプションエンティティを作成し、Stripe顧客IDを設定
         Subscription subscription = new Subscription();
         subscription.setStripeCustomerId(stripeCustomerId);
+        // サブスクリプションを保存
+        subscriptionRepository.save(subscription);
+        // サブスクリプションをユーザーに関連付け
         user.setSubscription(subscription);
         // ユーザーをデータベースに保存
         return userRepository.save(user);

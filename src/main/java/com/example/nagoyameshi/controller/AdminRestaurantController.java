@@ -71,7 +71,7 @@ public class AdminRestaurantController {
 	@GetMapping("/register")
 	public String register(Model model) {
 		model.addAttribute("restaurantRegisterForm", new RestaurantRegisterForm());
-		
+		model.addAttribute("categories", categoryRepository.findAll()); // カテゴリデータの追加
 		return "admin/restaurants/register";
 	}
 	

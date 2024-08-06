@@ -9,5 +9,4 @@ import com.example.nagoyameshi.entity.User;
 public interface UserRepository extends JpaRepository<User, Integer> { 
 	public User findByEmail(String email);
 	public Page<User> findByUserNameLikeOrFuriganaLike(String nameKeyword, String furiganaKeyword, Pageable pageable);
-	public User findByStripeCustomerId(String stripeCustomerId);//サブスク関連
 }

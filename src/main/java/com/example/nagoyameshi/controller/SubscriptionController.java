@@ -80,15 +80,19 @@ public class SubscriptionController {
     // 有料プラン解除メソッド
     @PostMapping("/cancel")
     public String cancelSubscription(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+    	// 認証されたユーザー情報を取得
     	User user = userDetailsImpl.getUser();
     	
     	if (user != null) {
+    		// ユーザーのサブスクリプション情報を取得
     		Subscription subscription = user.getSubscription();
     		if(subscription != null) {
+    			// Stripe サービスを利用してサブスクリプションをキャンセル
     			stripeService.cancelSubscription(subscription.getStripeSubscriptionId());
-    		
+    			// サブスクリプションの開始日と終了日をクリア（解除処理）
     			subscription.setSubscriptionStartDate(null);
     			subscription.setSubscriptionEndDate(null);
+    			// 更新されたサブスクリプション情報をデータベースに保存
     			userService.saveSubscription(subscription);
     		}
     		user.setRole(userService.findRoleByRoleName("ROLE_GENERAL"));//ROLE_GENERALに戻す
