@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.nagoyameshi.entity.Restaurant;
+import com.example.nagoyameshi.entity.RestaurantCategory;
 import com.example.nagoyameshi.form.RestaurantEditForm;
 import com.example.nagoyameshi.form.RestaurantRegisterForm;
 import com.example.nagoyameshi.repository.CategoryRepository;
+import com.example.nagoyameshi.repository.RestaurantCategoryRepository;
 import com.example.nagoyameshi.repository.RestaurantRepository;
 import com.example.nagoyameshi.service.RestaurantService;
 
@@ -33,11 +35,13 @@ public class AdminRestaurantController {
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantService restaurantService;
 	private final CategoryRepository categoryRepository;//カテゴリ
+	private final RestaurantCategoryRepository restaurantCategoryRepository;
 	
-	public AdminRestaurantController(RestaurantRepository restaurantRepository, RestaurantService restaurantService, CategoryRepository categoryRepository) {
+	public AdminRestaurantController(RestaurantRepository restaurantRepository, RestaurantService restaurantService, CategoryRepository categoryRepository, RestaurantCategoryRepository restaurantCategoryRepository) {
 		this.restaurantRepository = restaurantRepository;
 		this.restaurantService = restaurantService;
 		this.categoryRepository = categoryRepository;
+		this.restaurantCategoryRepository = restaurantCategoryRepository;
 	}
 	
 	//店舗一覧
@@ -138,6 +142,10 @@ public class AdminRestaurantController {
 	//店舗削除
 	@PostMapping("/{id}/delete")
 	public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
+		// レストランに関連するRestaurantCategoryを削除
+	    List<RestaurantCategory> restaurantCategories = restaurantCategoryRepository.findByRestaurantId(id);
+	    restaurantCategoryRepository.deleteAll(restaurantCategories);
+	    
 		restaurantRepository.deleteById(id);
 		
 		redirectAttributes.addFlashAttribute("successMessage", "店舗情報を削除しました。");

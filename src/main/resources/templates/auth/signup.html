@@ -23,7 +23,7 @@
 								
 								<div class="form-group row mb-3">
 									<div class="col-md-5">
-										<label for="name" class="col-form-label text-md-left fw-bold">
+										<label for="userName" class="col-form-label text-md-left fw-bold">
 											<div class="d-flex align-items-center">
 												<span class="me-1">氏名</span>
 												<span class="badge bg-danger">必須</span>
@@ -31,8 +31,8 @@
 										</label>
 									</div>
 									<div class="col-md-7">
-										<div th:if="${#fields.hasErrors('name')}" class="text-danger small mb-2" th:errors="*{name}"></div>
-										<input type="text" class="form-control" th:field="*{name}" autocomplete="name" autofocus placeholder="侍 太郎">
+										<div th:if="${#fields.hasErrors('userName')}" class="text-danger small mb-2" th:errors="*{userName}"></div>
+										<input type="text" class="form-control" th:field="*{userName}" autocomplete="userName" autofocus placeholder="侍 太郎">
 									</div>
 								</div>
 								

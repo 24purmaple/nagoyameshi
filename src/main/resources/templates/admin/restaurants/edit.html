@@ -19,15 +19,15 @@
 							<nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
 								<ol class="breadcrumb mb-0">
 									<li class="breadcrumb-item"><a th:href="@{/admin/restaurants}">店舗一覧</a> </li>
-									<li class="breadcrumb-item"><a th:href="@{/admin/restaurants/__${restaurantEditForm.getId()}__}">店舗詳細</a></li>
+									<li class="breadcrumb-item"><a th:href="@{/admin/restaurants/__${restaurantEditForm.getRestaurantId()}__}">店舗詳細</a></li>
 									<li class="breadcrumb-item active" aria-current="page">店舗情報編集</li>
 								</ol>
 							</nav>
 							
 							<h1 class="mb-4 text-center">店舗情報編集</h1>
 							
-							<form method="post" th:action="@{/admin/restaurants/__${restaurantEditForm.getId()}__/update}" th:object="${restaurantEditForm}" enctype="multipart/form-data">
-								<input type="hidden" th:field="*{id}">
+							<form method="post" th:action="@{/admin/restaurants/__${restaurantEditForm.getRestaurantId()}__/update}" th:object="${restaurantEditForm}" enctype="multipart/form-data">
+								<input type="hidden" th:field="*{restaurantId}">
 								
 								<div class="form-group row mb-3">
 									<div class="col-md-4">
@@ -68,10 +68,10 @@
 										<label for="category" class="col-form-label text-md-left fw-bold">カテゴリ</label>
 									</div>
 									<div class="col-md-8">
-										<div th:if="${#fields.hasErrors('category')}" class="text-danger small mb-2" th:errors="*{category}"></div>
+										<div th:if="${#fields.hasErrors('categoryIds')}" class="text-danger small mb-2" th:errors="*{categoryIds}"></div>
 										<div th:each="category : ${categories}" class="form-check form-check-inline">
 											<input type="checkbox" class="form-check-input" th:value="${category.id}" th:field="*{categoryIds}" th:id="${category.id}">
-											<label th:for="${category.id}" th:text="${category.category_name}"></label>
+											<label th:for="${category.id}" th:text="${category.categoryName}"></label>
 										</div>
 									</div>
 								</div>

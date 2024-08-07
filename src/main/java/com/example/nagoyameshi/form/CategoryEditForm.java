@@ -12,7 +12,7 @@ import lombok.Data;
 public class CategoryEditForm {
 
 	@NotNull
-	private Integer categoryId;
+	private Integer id;
 	
 	@NotBlank(message = "登録するカテゴリ名を入力してください。")
 	@Length(max = 50, message = "カテゴリは50文字以内で入力してください。")

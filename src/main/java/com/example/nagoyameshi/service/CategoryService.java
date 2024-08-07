@@ -29,7 +29,7 @@ public class CategoryService {
 	
 	@Transactional
 	public void update(CategoryEditForm categoryEditForm) {
-		Category category = categoryRepository.getReferenceById(categoryEditForm.getCategoryId());
+		Category category = categoryRepository.getReferenceById(categoryEditForm.getId());
 		
 		category.setCategoryName(categoryEditForm.getCategoryName());
 		

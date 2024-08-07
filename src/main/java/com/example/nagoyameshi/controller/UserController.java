@@ -30,7 +30,7 @@ public class UserController {
 		this.userRepository = userRepository;
 		this.userService = userService;
 	}
-	
+	//会員情報へ
 	@GetMapping
 	public String index(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {
 		User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());
@@ -45,7 +45,7 @@ public class UserController {
 		
 		return "user/index";
 	}
-	
+	//会員情報編集
 	@GetMapping("/edit")
 	public String edit(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {
 		User user =userRepository.getReferenceById(userDetailsImpl.getUser().getId());

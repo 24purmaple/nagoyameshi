@@ -50,6 +50,7 @@
                                      <tr th:each="category : ${categoryPage}">
                                          <td th:text="${category.getId()}"></td>
                                          <td th:text="${category.getCategoryName()}"></td>
+                                         <td><a th:href="@{/admin/categories/__${category.getId()}__/edit}">編集</a></td>
                                          <td><a href="#" class="nagoyameshi-link-danger" data-bs-toggle="modal" th:data-bs-target="${'#deleteCategoryModal' + category.getId()}">削除</a></td>
                                          
                                          <!-- 削除用モーダル -->

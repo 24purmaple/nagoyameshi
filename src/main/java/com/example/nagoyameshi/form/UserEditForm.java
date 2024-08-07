@@ -10,7 +10,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserEditForm {
 	@NotNull
-	private Integer userId;
+	private Integer Id;
 	
 	@NotBlank(message = "氏名を入力してください。")
 	private String userName;

@@ -52,7 +52,7 @@ public class UserService {
 	
 	@Transactional
 	public void update(UserEditForm userEditForm) {
-		User user = userRepository.getReferenceById(userEditForm.getUserId());
+		User user = userRepository.getReferenceById(userEditForm.getId());
 		
 		user.setUserName(userEditForm.getUserName());
 		user.setFurigana(userEditForm.getFurigana());
@@ -82,7 +82,7 @@ public class UserService {
 	
 	// メールアドレスが変更されたかどうかをチェックする
 	public boolean isEmailChanged(UserEditForm userEditForm) {
-		User currentUser = userRepository.getReferenceById(userEditForm.getUserId());
+		User currentUser = userRepository.getReferenceById(userEditForm.getId());
 		return !userEditForm.getEmail().equals(currentUser.getEmail());
 	}
 	
