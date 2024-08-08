@@ -19,13 +19,28 @@
 				<div class="container pt-4 pb-5 nagoyameshi-container">
 					<div class="row justify-content-center">
 						<div class="col-xxl-9 col-xl-10 col-lg-11">
-							<nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-								<ol class="breadcrumb mb-0">
-									<li class="breadcrumb-item"><a th:href="@{/}">ホーム</a> </li>
-									<li class="breadcrumb-item"><a th:href="@{/restaurants}">店舗一覧</a> </li>
-									<li class="breadcrumb-item active" aria-current="page">店舗詳細</li>
-								</ol>
-							</nav>
+							<div class="d-flex justify-content-between mb-4">
+								<nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+									<ol class="breadcrumb mb-0">
+										<li class="breadcrumb-item"><a th:href="@{/}">ホーム</a> </li>
+										<li class="breadcrumb-item"><a th:href="@{/restaurants}">店舗一覧</a> </li>
+										<li class="breadcrumb-item active" aria-current="page">店舗詳細</li>
+									</ol>
+								</nav>
+								
+								<!-- お気に入り -->
+								<div sec:authorize="isAuthenticated()">
+									<div th:if="${hasUserAlreadyFavorited}">
+										<a href="#" onclick="event.preventDefault(); document.getElementById('favorite-form').submit();">&#9829;お気に入り解除</a>
+										<form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/favorites/__${favorite.getId()}__/delete}" id="favorite-form" class="d-none"></form>
+									</div>
+									
+									<div th:unless="${hasUserAlreadyFavorited}">
+										<a href="#" onclick="event.preventDefault(); document.getElementById('favorite-form').submit();">&#9825;お気に入り登録</a>
+										<form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/favorites/create}" id="favorite-form" class="d-none"></form>
+									</div>
+								</div>
+							</div>
 							
 							<h1 class="mb-4 text-center" th:text="${restaurant.getRestaurantName()}"></h1>
 							
@@ -58,6 +73,26 @@
 											
 											<div class="col">
 												<span class="nagoyameshi-pre-wrap" th:text="${restaurant.getDescription()}"></span>
+											</div>
+										</div>
+										
+										<div class="row pb-2 mb-2 border-bottom">
+											<div class="col-4">
+												<span class="fw-bold">営業時間</span>
+											</div>
+											
+											<div class="col">
+												<span th:text="${restaurant.getOpeningTime()} + '～' + ${restaurant.getClosingTime()}"></span>
+											</div>
+										</div>
+										
+										<div class="row pb-2 mb-2 border-bottom">
+											<div class="col-4">
+												<span class="fw-bold">定休日</span>
+											</div>
+											
+											<div class="col">
+												<span th:text="${restaurant.getClosedDays}"></span>
 											</div>
 										</div>
 										
