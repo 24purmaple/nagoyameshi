@@ -32,7 +32,7 @@ public class AdminUserController {
 		Page<User> userPage;
 		//会員検索
 		if (keyword != null && !keyword.isEmpty()) {
-			userPage = userRepository.findByUserNameLikeOrFuriganaLike("%" + keyword + "%", "%" + keyword + "%", pageable);
+			userPage = userRepository.findByUserNameLikeOrFuriganaLikeOrEmailLike("%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", pageable);
 		} else {
 			userPage = userRepository.findAll(pageable);
 		}
