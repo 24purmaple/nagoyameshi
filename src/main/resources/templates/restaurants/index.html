@@ -176,7 +176,7 @@
 									</select>
 								</form>
 							</div>
-						
+							<!-- 一覧表示で、1店舗しか表示されない -->
 							<div class="mb-3" th:each="restaurant : ${restaurantPage}">
                                 <a th:href="@{/restaurants/__${restaurant.getId()}__}" class="link-dark nagoyameshi-card-link">
                                     <div class="card h-100">   
