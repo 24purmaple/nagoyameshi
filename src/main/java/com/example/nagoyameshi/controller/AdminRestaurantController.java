@@ -10,6 +10,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -81,8 +82,16 @@ public class AdminRestaurantController {
 	
 	//店舗登録
 	@PostMapping("/create")
-	public String create(@ModelAttribute @Validated RestaurantRegisterForm restaurantRegisterForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public String create(@ModelAttribute @Validated RestaurantRegisterForm restaurantRegisterForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+		
+		List<Integer> categoryIds = restaurantRegisterForm.getCategoryIds();
+		if (categoryIds == null || categoryIds.isEmpty()) {
+			bindingResult.addError(new FieldError("restauarntRegisterForm", "categoryIds", "少なくとも1つのカテゴリを選択してください"));
+		}
+		
+		
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("categories", categoryRepository.findAll());// カテゴリ一覧を追加
 			return "admin/restaurants/register";
 		}
 		
@@ -128,6 +137,12 @@ public class AdminRestaurantController {
 	//店舗更新（編集結果）
 	@PostMapping("/{id}/update")
 	public String update(@ModelAttribute @Validated RestaurantEditForm restaurantEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+		List<Integer> categoryIds = restaurantEditForm.getCategoryIds();
+		if (categoryIds == null || categoryIds.isEmpty()) {
+	        bindingResult.addError(new FieldError("RestaurantRegisterForm", "categoryIds", "少なくとも1つのカテゴリを選択してください。"));
+	    }
+		
+		
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("categories", categoryRepository.findAll());// カテゴリ一覧を再追加
 			return "admin/restaurants/edit";

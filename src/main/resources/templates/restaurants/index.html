@@ -201,7 +201,7 @@
                                                     </p>   
                                                                                                                                                                                                                                     
                                                     <p class="card-text">
-                                                        <span th:text="${#numbers.formatInteger(restaurant.getPrice(), 1, 'COMMA') + '円 / 泊'}"></span>
+                                                        <span th:text="${#numbers.formatInteger(restaurant.getMinPrice(), 1, 'COMMA') + '円～' + #numbers.formatInteger(restaurant.getMaxPrice(), 1, 'COMMA')}"></span>
                                                     </p>                                    
                                                 </div>
                                             </div>
