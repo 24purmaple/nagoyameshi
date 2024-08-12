@@ -161,6 +161,11 @@ public class AdminRestaurantController {
 	    List<RestaurantCategory> restaurantCategories = restaurantCategoryRepository.findByRestaurantId(id);
 	    restaurantCategoryRepository.deleteAll(restaurantCategories);
 	    
+	    /*// 関連データの削除
+	    reviewRepository.deleteByRestaurantId(id);
+	    favoriteRepository.deleteByRestaurantId(id);
+	    reservationRepository.deleteByRestaurantId(id);*/
+	    
 		restaurantRepository.deleteById(id);
 		
 		redirectAttributes.addFlashAttribute("successMessage", "店舗情報を削除しました。");
