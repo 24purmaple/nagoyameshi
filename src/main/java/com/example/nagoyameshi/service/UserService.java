@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.nagoyameshi.entity.Role;
 import com.example.nagoyameshi.entity.Subscription;
 import com.example.nagoyameshi.entity.User;
+import com.example.nagoyameshi.form.PasswordEditForm;
 import com.example.nagoyameshi.form.SignupForm;
 import com.example.nagoyameshi.form.UserEditForm;
 import com.example.nagoyameshi.repository.RoleRepository;
@@ -142,4 +143,17 @@ public class UserService {
         }
     }
 
+    // 現在のパスワード（確認用）と現在のパスワードの入力値が一致するかどうかをチェックする
+ 	public boolean isCorrectOldPassword(String oldPassword, User user) {
+ 		return passwordEncoder.matches(oldPassword, user.getPassword());
+ 	}
+
+	public void updatePassword(PasswordEditForm passwordEditForm) {
+		User user = userRepository.getReferenceById(passwordEditForm.getId());
+		
+		// 新しいパスワードを設定
+	    user.setPassword(passwordEncoder.encode(passwordEditForm.getNewPassword()));
+		
+		userRepository.save(user);
+	}
 }

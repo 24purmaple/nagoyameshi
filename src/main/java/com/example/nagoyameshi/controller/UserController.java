@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.nagoyameshi.entity.User;
+import com.example.nagoyameshi.form.PasswordEditForm;
 import com.example.nagoyameshi.form.UserEditForm;
 import com.example.nagoyameshi.repository.UserRepository;
 import com.example.nagoyameshi.security.UserDetailsImpl;
@@ -98,5 +99,48 @@ public class UserController {
 		redirectAttributes.addFlashAttribute("successMessage", "退会処理が完了しました。");
 		
 		return "redirect:/";
+	}
+	
+	//パスワード編集
+	@GetMapping("/password_edit")
+	public String passwordEdit(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {
+		User user =userRepository.getReferenceById(userDetailsImpl.getUser().getId());
+		
+		PasswordEditForm passwordEditForm = new PasswordEditForm();
+		passwordEditForm.setId(user.getId());
+		passwordEditForm.setNewPassword(null);
+		passwordEditForm.setNewPasswordConfirmation(null);
+		passwordEditForm.setOldPassword(null);
+		
+		model.addAttribute("passwordEditForm", passwordEditForm);
+			
+		return "user/password_edit";
+	}
+		
+	@PostMapping("/password_update")
+	public String passwordUpdate(@ModelAttribute @Validated PasswordEditForm passwordEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, UserDetailsImpl userDetailsImpl) {
+		
+		User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());
+		
+		// 旧パスワードと現在のパスワードが一致するかをチェックする
+	    if (!userService.isCorrectOldPassword(passwordEditForm.getOldPassword(), user)) {
+	        FieldError fieldError = new FieldError(bindingResult.getObjectName(), "oldPassword", "旧パスワードが正しくありません。");
+	        bindingResult.addError(fieldError);
+	    }
+		
+		// パスワードとパスワード（確認用）の入力値が一致しなければ、BindingResultオブジェクトにエラー内容を追加する
+		if (!userService.isSamePassword(passwordEditForm.getNewPassword(), passwordEditForm.getNewPasswordConfirmation())) {
+			FieldError fieldError = new FieldError(bindingResult.getObjectName(), "newPasswordConfirmation", "パスワードが一致しません。");
+			bindingResult.addError(fieldError);
+		}
+		
+		if(bindingResult.hasErrors()) {
+			return "user/password_edit";
+		}
+		
+		userService.updatePassword(passwordEditForm);
+		redirectAttributes.addFlashAttribute("successMessage", "パスワードを変更しました。");
+		
+		return "redirect:/user";
 	}
 }
