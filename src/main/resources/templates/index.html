@@ -36,19 +36,19 @@
 					</div>
 					
 					<h2 class="text-center mb-3">新着</h2>
-					<div class="row row-cols-lg-5 row-cols-2 g-3 mb-5">
+					<div class="row row-cols-lg-6 row-cols-3 g-3 mb-5">
 						<div class="col" th:each="newRestaurant : ${newRestaurants}">
 							<a th:href="@{/restaurants/__${newRestaurant.getId()}__}" class="link-dark nagoyameshi-card-link">
 								<div class="card h-100">
 									<img th:if="${newRestaurant.getImageName()}" th:src="@{/storage/__${newRestaurant.getImageName()}__}" class="card-img-top nagoyameshi-vertical-card-image" alt="店舗画像">
 									<img th:unless="${newRestaurant.getImageName()}" th:src="@{/images/noImage.png}" class="card-img-top nagoyameshi-vertical-card-image" alt="NO IMAGE">
 									<div class="card-body">
-										<h3 class="card-title" th:text="${newRestaurant.getName()}"></h3>
+										<h3 class="card-title" th:text="${newRestaurant.getRestaurantName()}"></h3>
 										<p class="card-text mb-1">
 											<small class="text-muted" th:text="${newRestaurant.getAddress()}"></small>
 										</p>
 										<p class="card-text">
-											<span th:text="${#numbers.formatInteger(newRestaurant.getMinPrice(), 1, 'COMMA') + '円～' + '#numbers.formatInteger(newRestaurant.getMaxPrice(), 1, 'COMMA')'}"></span>
+											<span th:text="${#numbers.formatInteger(newRestaurant.getMinPrice(), 1, 'COMMA') + '円～' + #numbers.formatInteger(newRestaurant.getMaxPrice(), 1, 'COMMA') + '円'}"></span>
 										</p>
 									</div>
 								</div>
