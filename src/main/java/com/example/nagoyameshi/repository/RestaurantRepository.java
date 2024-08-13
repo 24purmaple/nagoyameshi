@@ -1,5 +1,7 @@
 package com.example.nagoyameshi.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +28,10 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 	public Page<Restaurant> findByMaxPriceLessThanEqualOrderByMaxPriceDesc(Integer maxPrice, Pageable pageable);//予算検索最高価格降順
 	public Page<Restaurant> findByMinPriceLessThanEqualOrderByCreatedAtAsc(Integer minPrice, Pageable pageable);//予算検索登録昇順
 	public Page<Restaurant> findByMinPriceLessThanEqualOrderByCreatedAtDesc(Integer minPrice, Pageable pageable);//予算検索登録降順
+	
+	public List<Restaurant> findTop6ByOrderByCreatedAtDesc();//新着6件表示
+	//評価が高い順はreviewRepository？
 }
+//評価が高い順にトップ6の店舗を取得する
+//@Query("SELECT r FROM Restaurant r LEFT JOIN r.reviews rev GROUP BY r.id ORDER BY AVG(rev.rating) DESC")
+//List<Restaurant> findTop6ByOrderByAverageRatingDesc();
