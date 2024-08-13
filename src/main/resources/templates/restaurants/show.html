@@ -191,54 +191,71 @@
 							<!-- レビュー -->
 							<div class="container px-0">
 								<h2 class="mb-4 text-center">レビュー</h2>
+								
+								<!-- ログインしていないユーザー向けのメッセージ -->
+								<div sec:authorize="isAnonymous()" class="row justify-content-center mb-4">
+									<div class="col-lg-4 px-0 ps-lg-4 mb-4">
+										<div class="card">
+											<div class="card-body">
+												<p class="card-text">レビューの閲覧には<a th:href="@{/login}">ログイン</a>が必要です。</p>
+												<button type="button" class="btn text-white shadow-sm w-100 nagoyameshi-btn" disabled>レビューを閲覧する</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<!-- ログインしているユーザーがまだレビューを投稿していない場合のボタン -->
 								<div sec:authorize="isAuthenticated()" th:unless="${hasUserAlreadyReviewed}" class="row justify-content-center mb-4">
 									<div class="col-lg-4">
 										<a th:href="@{/restaurants/__${restaurant.getId()}__/reviews/register}" class="btn text-white shadow-sm w-100 nagoyameshi-btn">レビューを投稿する</a>
 									</div>
 								</div>
-								<div th:if="${#lists.isEmpty(newReviews)}" class="mb-4">
-									<p class="text-center">まだレビューがありません。</p>
-								</div>
-							
-						
-								<div th:unless="${#lists.isEmpty(newReviews)}" class="row row-cols-1 row-cols-md-2 g-4 mb-4">
-									<div th:each="review : ${newReviews}">
-										 <div class="col">
-											 <div class="card h-100">
-												 <div class="card-body">
-													 <div class="d-flex justify-content-between">                                    
-														 <h3 class="card-title" th:text="${review.getUser().getUserName()}"></h3>
-														 <span sec:authorize="isAuthenticated()"th:if="${#authentication.principal.user.id == review.getUser().getId()}">
-															 <a th:href="@{/restaurants/__${restaurant.getId()}__/reviews/__${review.getId()}__/edit}" class="me-2">編集</a>
-															 <a href="#" class="nagoyameshi-link-danger" data-bs-toggle="modal" th:data-bs-target="${'#deleteReviewModal' + review.getId()}">削除</a>
-															 <!-- 削除用モーダル -->
-															 <div class="modal fade" th:id="${'deleteReviewModal' + review.getId()}" tabindex="-1" th:aria-labelledby="${'deleteReviewModalLabel' + review.getId()}">
-																 <div class="modal-dialog">
-																	 <div class="modal-content">
-																		 <div class="modal-header">
-																			 <h5 class="modal-title" th:id="${'deleteReviewModalLabel' + review.getId()}" th:text="${restaurant.getRestaurantName() + 'のレビューを削除してもよろしいですか？'}"></h5>
-																			 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+								<!-- ログインしているユーザー向けのレビューコンテンツ -->	
+								<div sec:authorize="isAuthenticated()">
+								<!-- レビューが存在しない場合のメッセージ -->
+									<div th:if="${#lists.isEmpty(newReviews)}" class="mb-4">
+										<p class="text-center">まだレビューがありません。</p>
+									</div>
+									
+									<div th:unless="${#lists.isEmpty(newReviews)}" class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+										<div th:each="review : ${newReviews}">
+											 <div class="col">
+												 <div class="card h-100">
+													 <div class="card-body">
+														 <div class="d-flex justify-content-between">                                    
+															 <h3 class="card-title" th:text="${review.getUser().getUserName()}"></h3>
+															 <span sec:authorize="isAuthenticated()"th:if="${#authentication.principal.user.id == review.getUser().getId()}">
+																 <a th:href="@{/restaurants/__${restaurant.getId()}__/reviews/__${review.getId()}__/edit}" class="me-2">編集</a>
+																 <a href="#" class="nagoyameshi-link-danger" data-bs-toggle="modal" th:data-bs-target="${'#deleteReviewModal' + review.getId()}">削除</a>
+																 <!-- 削除用モーダル -->
+																 <div class="modal fade" th:id="${'deleteReviewModal' + review.getId()}" tabindex="-1" th:aria-labelledby="${'deleteReviewModalLabel' + review.getId()}">
+																	 <div class="modal-dialog">
+																		 <div class="modal-content">
+																			 <div class="modal-header">
+																				 <h5 class="modal-title" th:id="${'deleteReviewModalLabel' + review.getId()}" th:text="${restaurant.getRestaurantName() + 'のレビューを削除してもよろしいですか？'}"></h5>
+																				 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+																			 </div>
+																			 <div class="modal-footer">
+																				 <form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/reviews/__${review.getId()}__/delete}">
+																					 <button type="submit" class="btn nagoyameshi-btn-danger text-white shadow-sm">削除</button>
+																				 </form>
+																			 </div>
 																		 </div>
-																		 <div class="modal-footer">
-																			 <form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/reviews/__${review.getId()}__/delete}">
-																				 <button type="submit" class="btn nagoyameshi-btn-danger text-white shadow-sm">削除</button>
-																			 </form>
-																		 </div>
-																	 </div>
-																 </div>											 
-															 </div>
-														 </span>
+																	 </div>											 
+																 </div>
+															 </span>
+														 </div>
+														 <p class="card-text mb-1"><span class="nagoyameshi-star" th:each="star : ${#numbers.sequence(1, 5)}" th:text="${star <= review.getScore()} ? '&#9733;' : '&#9734;'"></span></p>
+														 <p class="card-text"><small class="text-muted" th:text="${#dates.format(review.getCreatedAt(), 'yyyy年MM月dd日')}"></small></p>
+														 <p class="card-text" th:text="${review.getComment()}"></p>
 													 </div>
-													 <p class="card-text mb-1"><span class="nagoyameshi-star" th:each="star : ${#numbers.sequence(1, 5)}" th:text="${star <= review.getScore()} ? '&#9733;' : '&#9734;'"></span></p>
-													 <p class="card-text"><small class="text-muted" th:text="${#dates.format(review.getCreatedAt(), 'yyyy年MM月dd日')}"></small></p>
-													 <p class="card-text" th:text="${review.getComment()}"></p>
 												 </div>
 											 </div>
 										 </div>
-									 </div>
-	                             </div>
-								<div class="text-center mb-4" th:if="${totalReviewCount > 6}">
-									<a th:href="@{/restaurants/__${restaurant.getId()}__/reviews}">すべてのレビューを見る</a>
+		                             </div>
+									<div class="text-center mb-4" th:if="${totalReviewCount > 6}">
+										<a th:href="@{/restaurants/__${restaurant.getId()}__/reviews}">すべてのレビューを見る</a>
+									</div>
 								</div>
 							</div>
 						</div>	
