@@ -21,7 +21,7 @@ public class ReservationInputForm {
 	@Min(value = 1, message = "人数は1人以上に設定してください。")
 	private Integer numberOfPeople;
 	
-	// 予約日を取得する
+	// 予約日を取得する　reservaDateがnullになっていて、予約の確定時にエラーになる
     public LocalDate getParsedReservationDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDate.parse(reservationDate, formatter);
