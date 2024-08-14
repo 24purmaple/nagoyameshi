@@ -5,7 +5,8 @@ maxDate = maxDate.setMonth(maxDate.getMonth() + 3);
 flatpickr("#reservationDate", {
 	dateFormat: "Y-m-d",
 	minDate: "today",
-	maxDate: maxDate
+	maxDate: maxDate,
+	locale: 'ja' // 日本語に設定
 	});
 	
 flatpickr("#reservationTime", {
