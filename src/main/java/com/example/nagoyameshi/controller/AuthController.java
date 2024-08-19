@@ -112,7 +112,7 @@ public class AuthController {
         } else {
             model.addAttribute("error", "メールアドレスが見つかりませんでした。");
         }
-        return "auth/request_password";
+        return "auth/request_reset_password";
     }
     
     @PostMapping("/reset_password")
