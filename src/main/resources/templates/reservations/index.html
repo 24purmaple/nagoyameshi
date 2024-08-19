@@ -29,6 +29,9 @@
                              <div th:if="${param.reserved}" class="alert alert-info">
 								 予約が完了しました。
 							 </div>
+							 <div th:if="${successMessage}" class="alert alert-info">
+								 <span th:text="${successMessage}"></span>
+							 </div>  
                              
                              <table class="table">
                                  <thead>
@@ -47,6 +50,24 @@
                                          <td th:text="${reservation.getReservationDate()}"></td>
                                          <td th:text="${reservation.getReservationTime()}"></td>
                                          <td th:text="${reservation.getNumberOfPeople + '名'}"></td>
+                                         <td><a href="#" class="nagoyameshi-link-danger" data-bs-toggle="modal" th:data-bs-target="${'#deleteRestaurantModal' + reservation.getId()}">削除</a></td>
+                                         
+                                         <!-- 削除用モーダル -->
+                                         <div class="modal fade" th:id="${'deleteRestaurantModal' + reservation.getId()}" tabindex="-1" th:aria-labelledby="${'deleteRestaurantModalLabel' + reservation.getId()}">
+											 <div class="modal-dialog">
+												 <div class="modal-content">
+													 <div class="modal-header">
+														 <h5 class="modal-title" th:id="${'deleteRestaurantModalLabel' + reservation.getId()}" th:text="'予約を削除してもよろしいですか？'"></h5>
+														 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+													 </div>
+													 <div class="modal-footer">
+														 <form method="post" th:action="@{/reservations/__${reservation.getId()}__/delete}">
+															 <button type="submit" class="btn nagoyameshi-btn-danger text-white shadow-sm">削除</button>
+														 </form>
+													 </div>
+												 </div>
+											 </div>											 
+										 </div>
                                      </tr>
                                  </tbody>
                              </table>

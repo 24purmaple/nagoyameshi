@@ -100,7 +100,7 @@ public class ReservationController {
 		LocalDate reservationDate = reservationInputForm.getParsedReservationDate();
 		LocalTime reservationTime = reservationInputForm.getParsedReservationTime();
 		
-		ReservationRegisterForm reservationRegisterForm = new ReservationRegisterForm(restaurant.getId(), user.getId(), reservationDate.toString(), reservationTime.toString(), reservationInputForm.getNumberOfPeople());
+		ReservationRegisterForm reservationRegisterForm = new ReservationRegisterForm(restaurant.getId(), user.getId(), reservationDate, reservationTime, reservationInputForm.getNumberOfPeople());
 		
 		//String sessionId = stripeService.createStripeSession(restaurant.getRestaurantName(), reservationRegisterForm, httpServletRequest);
 		

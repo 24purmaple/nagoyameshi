@@ -24,12 +24,12 @@ public class ReservationInputForm {
 	// 予約日を取得する　reservaDateがnullになっていて、予約の確定時にエラーになる
     public LocalDate getParsedReservationDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return LocalDate.parse(reservationDate, formatter);
+        return LocalDate.parse(this.reservationDate, formatter);
     }
 
     // 予約時間を取得する
     public LocalTime getParsedReservationTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        return LocalTime.parse(reservationTime, formatter);
+        return LocalTime.parse(this.reservationTime, formatter);
     }
 }
