@@ -17,12 +17,6 @@ public interface RestaurantCategoryRepository extends JpaRepository<RestaurantCa
 	//カテゴリ検索最小価格昇順
 	@Query("SELECT rc FROM RestaurantCategory rc JOIN rc.restaurant r WHERE rc.category.id = :categoryId ORDER BY r.minPrice ASC")
 	public Page<RestaurantCategory> findByCategoryIdOrderByRestaurantMinPriceAsc(Integer categoryId, Pageable pageable);
-	//カテゴリ検索最小価格降順
-	@Query("SELECT rc FROM RestaurantCategory rc JOIN rc.restaurant r WHERE rc.category.id = :categoryId ORDER BY r.minPrice DESC")
-	public Page<RestaurantCategory> findByCategoryIdOrderByRestaurantMinPriceDesc(Integer categoryId, Pageable pageable);
-	// カテゴリ検索最大価格昇順
-	@Query("SELECT rc FROM RestaurantCategory rc JOIN rc.restaurant r WHERE rc.category.id = :categoryId ORDER BY r.maxPrice ASC")
-    public Page<RestaurantCategory> findByCategoryIdOrderByRestaurantMaxPriceAsc(Integer categoryId, Pageable pageable); 
 	// カテゴリ検索最大価格降順
     @Query("SELECT rc FROM RestaurantCategory rc JOIN rc.restaurant r WHERE rc.category.id = :categoryId ORDER BY r.maxPrice DESC")
     public Page<RestaurantCategory> findByCategoryIdOrderByRestaurantMaxPriceDesc(Integer categoryId, Pageable pageable); 

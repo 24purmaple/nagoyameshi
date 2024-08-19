@@ -149,11 +149,17 @@
 										<div class="form-group mb-3">
 											<select class="form-control form-select" name="maxPrice">
 												<option value="" hidden>選択してください</option>
+												<option value="500" th:selected="${maxPrice == 500}">500円以内</option>
 												<option value="1000" th:selected="${maxPrice == 1000}">1,000円以内</option>
+												<option value="1500" th:selected="${maxPrice == 1500}">1,500円以内</option>
 												<option value="2000" th:selected="${maxPrice == 2000}">2,000円以内</option>
+												<option value="2500" th:selected="${maxPrice == 2500}">2,500円以内</option>
 												<option value="3000" th:selected="${maxPrice == 3000}">3,000円以内</option>
+												<option value="3500" th:selected="${maxPrice == 3500}">3,500円以内</option>
 												<option value="4000" th:selected="${maxPrice == 4000}">4,000円以内</option>
+												<option value="4500" th:selected="${maxPrice == 4500}">4,500円以内</option>
 												<option value="5000" th:selected="${maxPrice == 5000}">5,000円以内</option>
+												<!--<option value="5001" th:selected="${maxPrice == 5001}">5,000円以上</option>-->
 												<option value="6000" th:selected="${maxPrice == 6000}">6,000円以内</option>
 												<option value="7000" th:selected="${maxPrice == 7000}">7,000円以内</option>
 												<option value="8000" th:selected="${maxPrice == 8000}">8,000円以内</option>
@@ -180,7 +186,9 @@
 									<input th:if="${maxPrice}" type="hidden" name="maxPrice" th:value="${maxPrice}">
 									<select class="form-select form-select-sm" name="order" onChange="this.form.submit();">
 										<option value="createdAtDesc" th:selected="${order == 'createdAtDesc' || order == null}">新着順</option>
-										<option value="maxPriceAsc" th:selected="${order == 'maxPriceAsc'}">料金が安い順</option>
+										<option value="minPriceAsc" th:selected="${order == 'minPriceAsc'}">料金が安い順</option>
+										<option value="maxPriceDesc" th:selected="${order == 'maxPriceDesc'}">料金が高い順</option>
+										<option value="createdAtAsc" th:selected="${order == 'createdAtAsc'}">料金が高い順</option>
 									</select>
 								</form>
 							</div>

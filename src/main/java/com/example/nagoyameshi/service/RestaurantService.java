@@ -141,12 +141,8 @@ public class RestaurantService {
         Page<Restaurant> restaurantPage;
 
         if (keyword != null && !keyword.isEmpty()) {
-            if (order != null && order.equals("priceAsc")) {
+            if (order != null && order.equals("minPriceAsc")) {
                 restaurantPage = restaurantRepository.findByRestaurantNameLikeOrAddressLikeOrderByMinPriceAsc("%" + keyword + "%", "%" + address + "%", pageable);
-            } else if (order != null && order.equals("priceDesc")) {
-                restaurantPage = restaurantRepository.findByRestaurantNameLikeOrAddressLikeOrderByMinPriceDesc("%" + keyword + "%", "%" + address + "%", pageable);
-            } else if (order != null && order.equals("maxPriceAsc")) {
-                restaurantPage = restaurantRepository.findByRestaurantNameLikeOrAddressLikeOrderByMaxPriceAsc("%" + keyword + "%", "%" + address + "%", pageable);
             } else if (order != null && order.equals("maxPriceDesc")) {
                 restaurantPage = restaurantRepository.findByRestaurantNameLikeOrAddressLikeOrderByMaxPriceDesc("%" + keyword + "%", "%" + address + "%", pageable);
             } else if (order != null && order.equals("createdAtAsc")) {
@@ -155,12 +151,8 @@ public class RestaurantService {
                 restaurantPage = restaurantRepository.findByRestaurantNameLikeOrAddressLikeOrderByCreatedAtDesc("%" + keyword + "%", "%" + address + "%", pageable);
             }
         } else if (categoryId != null) {
-            if (order != null && order.equals("priceAsc")) {
+            if (order != null && order.equals("minPriceAsc")) {
                 restaurantPage = restaurantCategoryRepository.findByCategoryIdOrderByRestaurantMinPriceAsc(categoryId, pageable).map(RestaurantCategory::getRestaurant);
-            } else if (order != null && order.equals("priceDesc")) {
-                restaurantPage = restaurantCategoryRepository.findByCategoryIdOrderByRestaurantMinPriceDesc(categoryId, pageable).map(RestaurantCategory::getRestaurant);
-            } else if (order != null && order.equals("maxPriceAsc")) {
-                restaurantPage = restaurantCategoryRepository.findByCategoryIdOrderByRestaurantMaxPriceAsc(categoryId, pageable).map(RestaurantCategory::getRestaurant);
             } else if (order != null && order.equals("maxPriceDesc")) {
                 restaurantPage = restaurantCategoryRepository.findByCategoryIdOrderByRestaurantMaxPriceDesc(categoryId, pageable).map(RestaurantCategory::getRestaurant);
             } else if (order != null && order.equals("createdAtAsc")) {
@@ -169,18 +161,24 @@ public class RestaurantService {
                 restaurantPage = restaurantCategoryRepository.findByCategoryIdOrderByRestaurantCreatedAtDesc(categoryId, pageable).map(RestaurantCategory::getRestaurant);
             }
         } else if (price != null) {
-            if (order != null && order.equals("priceAsc")) {
+            if (order != null && order.equals("minPriceAsc")) {
                 restaurantPage = restaurantRepository.findByMinPriceLessThanEqualOrderByMinPriceAsc(price, pageable);
-            } else if (order != null && order.equals("priceDesc")) {
-                restaurantPage = restaurantRepository.findByMinPriceLessThanEqualOrderByMinPriceDesc(price, pageable);
-            } else if (order != null && order.equals("maxPriceAsc")) {
-                restaurantPage = restaurantRepository.findByMaxPriceLessThanEqualOrderByMaxPriceAsc(price, pageable);
             } else if (order != null && order.equals("maxPriceDesc")) {
                 restaurantPage = restaurantRepository.findByMaxPriceLessThanEqualOrderByMaxPriceDesc(price, pageable);
             } else if (order != null && order.equals("createdAtAsc")) {
                 restaurantPage = restaurantRepository.findByMinPriceLessThanEqualOrderByCreatedAtAsc(price, pageable);
             } else {
                 restaurantPage = restaurantRepository.findByMinPriceLessThanEqualOrderByCreatedAtDesc(price, pageable);
+            }
+        } else if(keyword == null|| keyword.isEmpty() && categoryId == null &&price == null){
+        	if (order != null && order.equals("minPriceAsc")) {
+                restaurantPage = restaurantRepository.findAllByOrderByMinPriceAsc(pageable);
+            } else if (order != null && order.equals("maxPriceDesc")) {
+                restaurantPage = restaurantRepository.findAllByOrderByMaxPriceDesc(pageable);
+            } else if (order != null && order.equals("createdAtAsc")) {
+                restaurantPage = restaurantRepository.findAllByOrderByCreatedAtAsc(pageable);
+            } else {
+                restaurantPage = restaurantRepository.findAllByOrderByCreatedAtDesc(pageable);
             }
         } else {
             restaurantPage = restaurantRepository.findAll(pageable);
