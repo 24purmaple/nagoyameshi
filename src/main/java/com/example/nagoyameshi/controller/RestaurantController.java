@@ -20,7 +20,6 @@ import com.example.nagoyameshi.entity.Review;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.ReservationInputForm;
 import com.example.nagoyameshi.repository.FavoriteRepository;
-import com.example.nagoyameshi.repository.RestaurantCategoryRepository;
 import com.example.nagoyameshi.repository.RestaurantRepository;
 import com.example.nagoyameshi.repository.ReviewRepository;
 import com.example.nagoyameshi.security.UserDetailsImpl;
@@ -41,7 +40,6 @@ public class RestaurantController {
 	public RestaurantController(
 			RestaurantService restaurantService,
 			RestaurantRepository restaurantRepository,
-			RestaurantCategoryRepository restaurantCategoryRepository,
 			ReviewRepository reviewRepository,
 			ReviewService reviewService,
 			FavoriteService favoriteService,
