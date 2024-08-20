@@ -108,9 +108,9 @@ public class AuthController {
             message.setText("以下のリンクをクリックしてパスワードをリセットしてください:\n" 
                             + "http://localhost:8080/reset-password?token=" + token);//メール本文、リンクを添えて
             mailSender.send(message);//メールの送信
-            model.addAttribute("message", "パスワードリセットリンクを送信しました。");
+            model.addAttribute("successMessage", "パスワードリセットリンクを送信しました。");
         } else {
-            model.addAttribute("error", "メールアドレスが見つかりませんでした。");
+            model.addAttribute("errorMessage", "メールアドレスが見つかりませんでした。");
         }
         return "auth/request_reset_password";
     }
@@ -122,10 +122,10 @@ public class AuthController {
     	// トークンと新しいパスワードを使用してパスワードをリセットします
         boolean result = passwordResetService.resetPassword(token, password);
         if (result) {
-            model.addAttribute("message", "パスワードがリセットされました。");
+            model.addAttribute("successMessage", "パスワードがリセットされました。");
             return "redirect:/";//リセット成功でトップページへ
         } else {
-            model.addAttribute("error", "トークンが無効または期限切れです。");
+            model.addAttribute("errorMessage", "トークンが無効または期限切れです。");
             return "auth/reset_password";//リセットに失敗で同じページの再表示
         }
         
