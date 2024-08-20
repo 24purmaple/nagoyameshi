@@ -148,8 +148,7 @@ public class UserService {
  		return passwordEncoder.matches(oldPassword, user.getPassword());
  	}
 
-	public void updatePassword(PasswordEditForm passwordEditForm) {
-		User user = userRepository.getReferenceById(passwordEditForm.getId());
+	public void updatePassword(User user, PasswordEditForm passwordEditForm) {
 		
 		// 新しいパスワードを設定
 	    user.setPassword(passwordEncoder.encode(passwordEditForm.getNewPassword()));

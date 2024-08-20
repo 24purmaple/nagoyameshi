@@ -106,19 +106,21 @@ public class UserController {
 	public String passwordEdit(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {
 		User user =userRepository.getReferenceById(userDetailsImpl.getUser().getId());
 		
-		PasswordEditForm passwordEditForm = new PasswordEditForm();
+		PasswordEditForm passwordEditForm = new PasswordEditForm(null, null, null, null);
 		passwordEditForm.setId(user.getId());
 		passwordEditForm.setNewPassword(null);
 		passwordEditForm.setNewPasswordConfirmation(null);
 		passwordEditForm.setOldPassword(null);
 		
 		model.addAttribute("passwordEditForm", passwordEditForm);
-			
+		
 		return "user/password_edit";
 	}
 		
 	@PostMapping("/password_update")
-	public String passwordUpdate(@ModelAttribute @Validated PasswordEditForm passwordEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, UserDetailsImpl userDetailsImpl) {
+	public String passwordUpdate(@ModelAttribute @Validated PasswordEditForm passwordEditForm,
+			BindingResult bindingResult, RedirectAttributes redirectAttributes,
+			@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
 		
 		User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());
 		
@@ -138,7 +140,7 @@ public class UserController {
 			return "user/password_edit";
 		}
 		
-		userService.updatePassword(passwordEditForm);
+		userService.updatePassword(user, passwordEditForm);
 		redirectAttributes.addFlashAttribute("successMessage", "パスワードを変更しました。");
 		
 		return "redirect:/user";
