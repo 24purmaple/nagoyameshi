@@ -106,7 +106,7 @@ public class AuthController {
             message.setTo(email);//送信先
             message.setSubject("パスワードリセット");//メールの件名
             message.setText("以下のリンクをクリックしてパスワードをリセットしてください:\n" 
-                            + "http://localhost:8080/reset-password?token=" + token);//メール本文、リンクを添えて
+                            + "http://localhost:8080/reset_password?token=" + token);//メール本文、リンクを添えて
             mailSender.send(message);//メールの送信
             model.addAttribute("successMessage", "パスワードリセットリンクを送信しました。");
         } else {
@@ -115,17 +115,34 @@ public class AuthController {
         return "auth/request_reset_password";
     }
     
+    //パスワードリセットページの表示 (GETリクエスト)
+    @GetMapping("/reset_password")
+    public String showResetPasswordPage(@RequestParam("token") String token, Model model) {
+        // トークンを確認し、ページに渡す
+        model.addAttribute("token", token);
+        return "auth/reset_password"; // パスワードリセットページを返す
+    }
+    
     @PostMapping("/reset_password")
     public String resetPassword(@RequestParam("token") String token,
-                                @RequestParam("password") String password,
+                                @RequestParam("newPassword") String newPassword,
+                                @RequestParam("newPasswordConfirmation") String newPasswordConfirmation,
                                 Model model) {
+    	//パスワードの一致確認
+    	if(!newPassword.equals(newPasswordConfirmation)) {
+    		model.addAttribute("errorMessage", "パスワードが一致しません");
+    		model.addAttribute("token", token);
+    		return "auth/reset_password"; // 一致しない場合は同じページを表示
+    	}
+    	
     	// トークンと新しいパスワードを使用してパスワードをリセットします
-        boolean result = passwordResetService.resetPassword(token, password);
+        boolean result = passwordResetService.resetPassword(token, newPassword);
         if (result) {
             model.addAttribute("successMessage", "パスワードがリセットされました。");
             return "redirect:/";//リセット成功でトップページへ
         } else {
             model.addAttribute("errorMessage", "トークンが無効または期限切れです。");
+            model.addAttribute("token", token); // トークンを再度渡す
             return "auth/reset_password";//リセットに失敗で同じページの再表示
         }
         
