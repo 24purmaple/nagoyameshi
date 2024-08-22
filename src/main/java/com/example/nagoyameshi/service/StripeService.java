@@ -4,11 +4,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.nagoyameshi.entity.User;
-import com.example.nagoyameshi.form.SubscriptionForm;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class StripeService {
@@ -19,35 +20,34 @@ public class StripeService {
 	}
 	
 	// セッションを作成し、Stripeに必要な情報を返す
-	public String createStripeSession(User user, SubscriptionForm subscriptionForm) {
+	public String createStripeSession(User user, HttpServletRequest httpServletRequest) {
 		Stripe.apiKey = stripeApiKey;
+		String requestUrl = new String(httpServletRequest.getRequestURL());
 		
 		SessionCreateParams params =
 				SessionCreateParams.builder()
 				.addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)//支払方法(CARD)
-				.setCustomerEmail(user.getEmail())
+				.setCustomerEmail(user.getEmail())// 顧客のメールアドレスを設定
 				.addLineItem(
 						SessionCreateParams.LineItem.builder()
 						.setPriceData(
 							SessionCreateParams.LineItem.PriceData.builder()
-								.setUnitAmount(30000L)//金額（300円）
 								.setCurrency("jpy")
+								.setUnitAmount(300L)//金額（300円）
 								.setProductData(
 										SessionCreateParams.LineItem.PriceData.ProductData.builder()
 										.setName("Monthly Subscription")
+										.build())
+								.setRecurring(
+										SessionCreateParams.LineItem.PriceData.Recurring.builder()
+										.setInterval(SessionCreateParams.LineItem.PriceData.Recurring.Interval.MONTH)
 										.build())
 								.build())
 						.setQuantity(1L)
 						.build())
 				.setMode(SessionCreateParams.Mode.SUBSCRIPTION)
-				.setSuccessUrl("http://localhost:8080/subscription/success")
-				.setCancelUrl("http://localhost:8080/subscription/canceled")
-				.putMetadata("cardHolderName", subscriptionForm.getCardHolderName())
-				.putMetadata("cardNumber", subscriptionForm.getCardNumber())
-				.putMetadata("expiryMonth", subscriptionForm.getExpiryMonth())
-				.putMetadata("expiryYear", subscriptionForm.getExpiryYear())
-				.putMetadata("securityCode", subscriptionForm.getSecurityCode())
-				.putMetadata("postalCode", subscriptionForm.getPostalCode())
+				.setSuccessUrl(requestUrl.replace("subscription//confirm", ""))
+				.setCancelUrl(requestUrl.replace("/confirm",""))
 				.build();
 		try {
 			Session session = Session.create(params);

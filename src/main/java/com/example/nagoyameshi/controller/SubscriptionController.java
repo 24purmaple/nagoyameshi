@@ -4,16 +4,16 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.nagoyameshi.entity.Subscription;
 import com.example.nagoyameshi.entity.User;
-import com.example.nagoyameshi.form.SubscriptionForm;
 import com.example.nagoyameshi.security.UserDetailsImpl;
 import com.example.nagoyameshi.service.StripeService;
 import com.example.nagoyameshi.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -30,30 +30,29 @@ public class SubscriptionController {
 	
 	//有料プラン登録ページの表示
 	@GetMapping("/confirm")
-	public String confirm(Model model) {
-		model.addAttribute("subscriptionForm", new SubscriptionForm());
-		return "subscription/confirm";
-	}
-	
-	// 有料プランの登録処理
-    @PostMapping("/confirm")
-    public String confirm(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
-    		@ModelAttribute("subscriptionForm") SubscriptionForm subscriptionForm
-    		) {
+	public String confirm(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
+    		HttpServletRequest httpServletRequest,
+    		Model model) {
     	//ログイン中のユーザーの情報を取得
         User user = userDetailsImpl.getUser();
         if (user != null) {
         	//Stripeのセッションを作成し、セッションIDを取得
-        	String sessionId = stripeService.createStripeSession(user, subscriptionForm);
-
+        	String sessionId = stripeService.createStripeSession(user, httpServletRequest);
+        	
+        	// セッションIDをモデルに追加
+            model.addAttribute("sessionId", sessionId);
+        	
         	//Stripeの決済ページにリダイレクト
-        	return "redirect:https://checkout.stripe.com/pay" + sessionId;
+        	return "subscription/confirm";
         }
         return "redirect:/subscription/success";
-    }
-    
-    
+	}
+	
+	// 有料プランの登録処理
 
+    
+    
+    //@ModelAttribute("subscriptionForm") SubscriptionForm subscriptionForm
     /*@PostMapping("/register")
     public String processSubscription(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, SubscriptionForm subscriptionForm) {
     	User user = userDetailsImpl.getUser();
