@@ -79,7 +79,7 @@
 									 
 									 <div class="dropdown-divider"></div>
 									 
-									 <a class="dropdown-item nagoyameshi-dropdown-item" href="#">有料プラン解約</a><!--有料プラン解約ページを作成する-->
+									 <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/subscription/cancel}">有料プラン解約</a><!--有料プラン解約ページを作成する-->
 									 <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 										 ログアウト
 									 </a>
@@ -114,10 +114,19 @@
 		
 		<!-- フッターの部品化 -->
 		<div th:fragment="footer" th:remove="tag">
-			<footer>
-                 <div class="d-flex justify-content-center align-items-center h-100">
-                     <p class="text-center text-muted small mb-0">&copy; SAMURAI Travel All rights reserved.</p>      
-                 </div>                 
+			<footer style="padding: 10px 15px 80px 15px;">
+                 <div class="d-flex justify-content-center footer-logo">
+					 <a class="navbar-brand app-name" th:href="@{/}">
+						 <div class="d-flex align-items-center">
+							 <img class="nagoyameshi-logo me-1" th:src="@{/images/logo.png}" alt="NAGOYAMESHI">
+						 </div>
+					 </a>
+                 </div>
+                 <div class="d-flex justify-content-center footer-link">
+					 <a th:href="@{/company}" class="link-secondary me-3">会社概要</a>
+					 <a th:href="@{/policy}" class="link-secondary me-3">利用規約</a>
+				 </div>
+                     <p class="text-center text-muted small mb-0">&copy; NAGOYAMESHI All rights reserved.</p>                 
              </footer>
          </div>    
          
