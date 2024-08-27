@@ -91,7 +91,7 @@ INSERT IGNORE INTO histories (id, user_id, restaurant_id) VALUES (1, 3, 1 );
 INSERT IGNORE INTO histories (id, user_id, restaurant_id) VALUES (2, 3, 2 );
 INSERT IGNORE INTO histories (id, user_id, restaurant_id) VALUES (3, 3, 3 );
 
--- policyテーブルにデータを挿入
+/*-- policyテーブルにデータを挿入
 INSERT IGNORE INTO policies (id, policy_text, effective_date) VALUES (1, '利用規約1', '2024-01-01');
 INSERT IGNORE INTO policies (id, policy_text, effective_date) VALUES (2, '利用規約2', '2024-02-01');
 INSERT IGNORE INTO policies (id, policy_text, effective_date) VALUES (3, '利用規約3', '2024-03-01');
@@ -107,5 +107,5 @@ INSERT IGNORE INTO edit_histories (id, user_id, edited_table, record_id, action_
 INSERT IGNORE INTO edit_histories (id, user_id, edited_table, record_id, action_type) VALUES (3, 3, 'favorite', 3, 'delete');
 
 -- subscriptionテーブル
-INSERT IGNORE INTO subscriptions (subscription_start_date, subscription_end_date, stripe_customer_id, stripe_subscription_id) VALUES ('2023-01-01', '2023-01-31', 'cus_test1', 'sub_test1');
-INSERT IGNORE INTO subscriptions (subscription_start_date, subscription_end_date, stripe_customer_id, stripe_subscription_id) VALUES ('2023-02-01', '2024-01-31', 'cus_test2', 'sub_test2');
+INSERT IGNORE INTO subscriptions (subscription_start_date, subscription_end_date, stripe_customer_id, stripe_subscription_id, user_id) VALUES ('2023-01-01', '2023-01-31', 'cus_test1', 'sub_test1');
+INSERT IGNORE INTO subscriptions (subscription_start_date, subscription_end_date, stripe_customer_id, stripe_subscription_id, user_id) VALUES ('2023-02-01', '2024-01-31', 'cus_test2', 'sub_test2'); */

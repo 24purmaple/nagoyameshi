@@ -3,14 +3,6 @@ CREATE TABLE IF NOT EXISTS roles (
 	role_name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS subscriptions (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    subscription_start_date DATE,
-    subscription_end_date DATE,
-    stripe_customer_id VARCHAR(255) NOT NULL UNIQUE,
-    stripe_subscription_id VARCHAR(255) NOT NULL UNIQUE
-);
-
 CREATE TABLE IF NOT EXISTS users (
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	role_id INT NOT NULL,
@@ -22,9 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
 	enabled BOOLEAN NOT NULL,
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	subscription_id INT,
-	FOREIGN KEY (role_id) REFERENCES roles (id),
-	FOREIGN KEY (subscription_id) REFERENCES subscriptions(id)
+	FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 
 CREATE TABLE IF NOT EXISTS restaurants (
@@ -118,6 +108,16 @@ CREATE TABLE IF NOT EXISTS favorites (
 	UNIQUE (restaurant_id, user_id),
 	FOREIGN KEY (restaurant_id) REFERENCES restaurants (id),
 	FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS subscriptions (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    subscription_start_date DATE,
+    subscription_end_date DATE,
+    stripe_customer_id VARCHAR(255) NOT NULL UNIQUE,
+    stripe_subscription_id VARCHAR(255) NOT NULL UNIQUE,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS histories (
