@@ -1,11 +1,18 @@
 package com.example.nagoyameshi.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.nagoyameshi.entity.User;
+import com.example.nagoyameshi.repository.SubscriptionRepository;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
+import com.stripe.model.Event;
+import com.stripe.model.StripeObject;
+import com.stripe.model.Subscription;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 
@@ -16,7 +23,14 @@ public class StripeService {
 	@Value("${stripe.api-key}")
 	private String stripeApiKey;
 	
-	public StripeService() {
+	private final SubscriptionService subscriptionService;
+	private final UserService userService;
+	private final SubscriptionRepository subscriptionRepository;
+	
+	public StripeService(SubscriptionService subscriptionService, UserService userService, SubscriptionRepository subscriptionRepository) {
+		this.subscriptionService = subscriptionService;
+		this.userService = userService;
+		this.subscriptionRepository = subscriptionRepository;
 	}
 	
 	// セッションを作成し、Stripeに必要な情報を返す
@@ -46,7 +60,7 @@ public class StripeService {
 						.setQuantity(1L)
 						.build())
 				.setMode(SessionCreateParams.Mode.SUBSCRIPTION)
-				.setSuccessUrl(requestUrl.replace("subscription//confirm", ""))
+				.setSuccessUrl(requestUrl.replace("/subscription/confirm", ""))
 				.setCancelUrl(requestUrl.replace("/confirm",""))
 				.build();
 		try {
@@ -57,8 +71,80 @@ public class StripeService {
 			return "";
 		}
 	}
+    
+	// セッションから顧客のIDから情報を取得し、ReservationServiceとUserServiceクラスを介してデータベースに登録する
+	public void processSessionCompleted(Event event) {
+	    System.out.println("Webhook Event Received: " + event.getType());
 
-	// サブスクリプションをキャンセルするメソッド
+	    Optional<StripeObject> optionalStripeObject = event.getDataObjectDeserializer().getObject();
+	    optionalStripeObject.ifPresentOrElse(stripeObject -> {
+	        System.out.println("サブスクリプションの登録処理が成功しました。");
+	        System.out.println("Stripe API Version:" + event.getApiVersion());
+	        System.out.println("stripe-java Version:" + Stripe.VERSION);
+
+	        if (stripeObject instanceof Session) {
+	            System.out.println("StripeObject is instance of Session.");
+	            Session session = (Session) stripeObject;
+	            String stripeCustomerId = session.getCustomer();
+	            String stripeSubscriptionId = session.getSubscription();
+	            System.out.println("Customer ID: " + stripeCustomerId);
+	            System.out.println("Subscription ID: " + stripeSubscriptionId);
+	            
+	            try {
+	                Customer customer = Customer.retrieve(stripeCustomerId);
+	                String email = customer.getEmail();
+	                System.out.println("Customer Email: " + email);
+	                
+	                subscriptionService.create(email, stripeCustomerId, stripeSubscriptionId);
+	                userService.roleUpgrade(email);
+	                System.out.println("サブスクリプションの登録処理が成功しました。");
+	            } catch (StripeException e) {
+	                System.err.println("StripeException: " + e.getMessage());
+	                e.printStackTrace();
+	            }
+	        } else {
+	            System.err.println("Unexpected object type: " + stripeObject.getClass().getName());
+	        }
+	    }, () -> {
+	        // エラーログを追加して詳細を出力
+	        System.err.println("サブスクリプションの登録処理が失敗しました。StripeObject not present.");
+	        System.err.println("Event Data Object Deserializer JSON: " + event.getDataObjectDeserializer().getRawJson());
+	        System.err.println("Event Type: " + event.getType());
+	        System.err.println("Stripe API Version: " + event.getApiVersion());
+	        System.err.println("stripe-java Version: " + Stripe.VERSION);
+	    });
+	}
+
+	
+	public void updateSubscription(Event event) {
+	    Optional<StripeObject> optionalStripeObject = event.getDataObjectDeserializer().getObject();
+	    optionalStripeObject.ifPresentOrElse(stripeObject -> {
+	        System.out.println("サブスクリプションの更新処理が成功しました。");
+	        System.out.println("Stripe API Version:" + event.getApiVersion());
+	        System.out.println("stripe-java Version:" + Stripe.VERSION);
+	        Session session = (Session) stripeObject;
+	        String stripeCustomerId = session.getCustomer();
+	        String stripeSubscriptionId = session.getSubscription();
+	        
+	        try {
+	            Customer customer = Customer.retrieve(stripeCustomerId);
+	            String email = customer.getEmail();
+	            
+	            subscriptionService.update(email, stripeSubscriptionId);
+	            userService.roleUpgrade(email);
+	        } catch (StripeException e) {
+	            e.printStackTrace();
+	        }
+	    },
+	    () -> {
+	        System.out.println("サブスクリプションの更新処理が失敗しました。");
+	        System.out.println("Stripe API Version:" + event.getApiVersion());
+	        System.out.println("stripe-java Version:" + Stripe.VERSION);
+	    });
+	}
+
+
+	// サブスクリプションをキャンセルするメソッド（手動）
     public void cancelSubscription(String subscriptionId) {
         try {
         	com.stripe.model.Subscription subscription = com.stripe.model.Subscription.retrieve(subscriptionId);
@@ -68,40 +154,15 @@ public class StripeService {
         }
     }
 	
- /* サブスクリプションをキャンセルするメソッド
-    public void cancelSubscription(String user) {
-        try {
-            Subscription subscription = Subscription.retrieve(user);
-            subscription.cancel();
-        } catch (StripeException e) {
-            e.printStackTrace();
-        }
-    } */
-    
-	/*// セッションから予約情報を取得し、ReservationServiceクラスを介してデータベースに登録する
-	public void processSessionCompleted(Event event) {
+	//サブスクキャンセル時のデータ削除(カードの不備などで払えない場合　自動)
+	public void delete(Event event) {
 		Optional<StripeObject> optionalStripeObject = event.getDataObjectDeserializer().getObject();
-		optionalStripeObject.ifPresentOrElse(stripeObject -> {
-			Session session = (Session)stripeObject;
-			SessionRetrieveParams params = SessionRetrieveParams.builder().addExpand("payment_intent").build();
-			
-			try {
-				session = Session.retrieve(session.getId(), params, null);
-				Map<String, String> paymentIntentObject = session.getPaymentIntentObject().getMetadata();
-				subscriptionService.create(paymentIntentObject);
-			} catch (StripeException e) {
-				e.printStackTrace();
-			}
-			System.out.println("予約一覧ページの登録処理が成功しました。");
-			System.out.println("Stripe API Version:" + event.getApiVersion());
-			System.out.println("stripe-java Version:" + Stripe.VERSION);
-		},
-		() -> {
-			System.out.println("予約一覧ページの登録処理が失敗しました。");
-			System.out.println("Stripe API Version:" + event.getApiVersion());
-			System.out.println("stripe-java Version:" + Stripe.VERSION);
+		optionalStripeObject.ifPresent(stripeObject -> {
+			Subscription subscription = (Subscription)stripeObject;
+			String subscriptionId = subscription.getId();
+
+			subscriptionRepository.deleteByStripeSubscriptionId(subscriptionId);
+			//userService.rolegrade(email);
 		});
-	}*/
-
-
+	}
 }

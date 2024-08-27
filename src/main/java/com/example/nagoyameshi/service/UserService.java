@@ -1,37 +1,27 @@
 package com.example.nagoyameshi.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.nagoyameshi.entity.Role;
-import com.example.nagoyameshi.entity.Subscription;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.PasswordEditForm;
 import com.example.nagoyameshi.form.SignupForm;
 import com.example.nagoyameshi.form.UserEditForm;
 import com.example.nagoyameshi.repository.RoleRepository;
-import com.example.nagoyameshi.repository.SubscriptionRepository;
 import com.example.nagoyameshi.repository.UserRepository;
-import com.stripe.Stripe;
-import com.stripe.exception.StripeException;
-import com.stripe.model.Customer;
 
 @Service
 public class UserService {
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
-	private final SubscriptionRepository subscriptionRepository;
 	private final PasswordEncoder passwordEncoder;
 	
 	//↓コンストラクタ
-	public UserService(UserRepository userRepository, RoleRepository roleRepository, SubscriptionRepository subscriptionRepository, PasswordEncoder passwordEncoder) {
+	public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;	//←フィールド
 		this.roleRepository = roleRepository;
-		this.subscriptionRepository = subscriptionRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
 	
@@ -95,54 +85,25 @@ public class UserService {
 
 	//サブスク用に追加
     @Transactional
-    public void save(User user) {
+    public void roleUpgrade(String email) {
+    	User user = userRepository.findByEmail(email);
+    	Role role = roleRepository.getReferenceById(2);
+    	
+    	user.setRole(role);
+    	
         userRepository.save(user);
     }
     
     @Transactional
-	public void saveSubscription(Subscription subscription) {
-		subscriptionRepository.save(subscription);
-	}
-
-	public Role findRoleByRoleName(String roleName) {
-		return roleRepository.findByRoleName(roleName);
-	}
-
-	public Subscription findSubscriptionByStripeCustomerId(String stripeCustomerId) {
-        return subscriptionRepository.findByStripeCustomerId(stripeCustomerId);
-    }
-	
-	public User registerUser(User user) {
-        // ユーザーをデータベースに保存する前に、Stripe顧客を作成
-        String stripeCustomerId = createStripeCustomer(user);
-        // 新しいサブスクリプションエンティティを作成し、Stripe顧客IDを設定
-        Subscription subscription = new Subscription();
-        subscription.setStripeCustomerId(stripeCustomerId);
-        // サブスクリプションを保存
-        subscriptionRepository.save(subscription);
-        // サブスクリプションをユーザーに関連付け
-        user.setSubscription(subscription);
-        // ユーザーをデータベースに保存
-        return userRepository.save(user);
+    public void roleDowngrade(String email) {
+    	User user = userRepository.findByEmail(email);
+    	Role role = roleRepository.getReferenceById(1);
+    	
+    	user.setRole(role);
+    	
+        userRepository.save(user);
     }
     
-    private String createStripeCustomer(User user) {
-        // Stripe APIを使用して顧客を作成
-        Stripe.apiKey = "your-stripe-api-key";
-        
-        Map<String, Object> params = new HashMap<>();
-        params.put("email", user.getEmail());
-        params.put("name", user.getUserName());
-        
-        try {
-            Customer customer = Customer.create(params);
-            return customer.getId();
-        } catch (StripeException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Stripe顧客の作成に失敗しました");
-        }
-    }
-
     // 現在のパスワード（確認用）と現在のパスワードの入力値が一致するかどうかをチェックする
  	public boolean isCorrectOldPassword(String oldPassword, User user) {
  		return passwordEncoder.matches(oldPassword, user.getPassword());

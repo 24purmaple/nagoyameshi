@@ -80,7 +80,7 @@ public class SubscriptionController {
     @PostMapping("/cancel")
     public String cancelSubscription(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
     	// 認証されたユーザー情報を取得
-    	User user = userDetailsImpl.getUser();
+    	/*User user = userDetailsImpl.getUser();
     	
     	if (user != null) {
     		// ユーザーのサブスクリプション情報を取得
@@ -96,7 +96,7 @@ public class SubscriptionController {
     		}
     		user.setRole(userService.findRoleByRoleName("ROLE_GENERAL"));//ROLE_GENERALに戻す
     		userService.save(user); // ユーザーのサブスクリプション情報を更新
-    	}
+    	}*/
     	return "redirect:/";
     }
 }

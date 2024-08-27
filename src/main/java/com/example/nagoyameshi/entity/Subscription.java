@@ -7,7 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -33,6 +34,7 @@ public class Subscription {
 	@Column(name = "stripe_subscription_id")
 	private String stripeSubscriptionId; // Stripeでサブスクリプションのプランを識別するためのID（現状1種なので全て同じ値）
 	
-	@OneToOne(mappedBy = "subscription")
+	@ManyToOne
+	@JoinColumn(name = "user_id")
     private User user;
 }
