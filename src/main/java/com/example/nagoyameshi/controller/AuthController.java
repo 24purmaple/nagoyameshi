@@ -127,6 +127,7 @@ public class AuthController {
     public String resetPassword(@RequestParam("token") String token,
                                 @RequestParam("newPassword") String newPassword,
                                 @RequestParam("newPasswordConfirmation") String newPasswordConfirmation,
+                                RedirectAttributes redirectAttributes,
                                 Model model) {
     	//パスワードの一致確認
     	if(!newPassword.equals(newPasswordConfirmation)) {
@@ -138,7 +139,7 @@ public class AuthController {
     	// トークンと新しいパスワードを使用してパスワードをリセットします
         boolean result = passwordResetService.resetPassword(token, newPassword);
         if (result) {
-            model.addAttribute("successMessage", "パスワードがリセットされました。");
+        	redirectAttributes.addFlashAttribute("successMessage", "パスワードがリセットされました。");
             return "redirect:/";//リセット成功でトップページへ
         } else {
             model.addAttribute("errorMessage", "トークンが無効または期限切れです。");
