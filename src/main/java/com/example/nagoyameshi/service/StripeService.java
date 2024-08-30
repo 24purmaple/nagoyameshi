@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.repository.SubscriptionRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
@@ -112,6 +113,18 @@ public class StripeService {
 	        System.err.println("Event Type: " + event.getType());
 	        System.err.println("Stripe API Version: " + event.getApiVersion());
 	        System.err.println("stripe-java Version: " + Stripe.VERSION);
+	        
+	     // 手動デシリアライズを試みる
+	        String rawJson = event.getDataObjectDeserializer().getRawJson();
+	        System.out.println("Raw JSON: " + rawJson);
+	        try {
+	            ObjectMapper objectMapper = new ObjectMapper();
+	            Session session = objectMapper.readValue(rawJson, Session.class);
+	            System.out.println("Manually deserialized Session: " + session);
+	        } catch (Exception e) {
+	            System.err.println("Manual deserialization failed: " + e.getMessage());
+	            e.printStackTrace();
+	        }
 	    });
 	}
 

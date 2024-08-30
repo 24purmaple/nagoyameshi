@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.nagoyameshi.entity.Subscription;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.security.UserDetailsImpl;
 import com.example.nagoyameshi.service.StripeService;
@@ -80,23 +79,20 @@ public class SubscriptionController {
     @PostMapping("/cancel")
     public String cancelSubscription(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
     	// 認証されたユーザー情報を取得
-    	/*User user = userDetailsImpl.getUser();
-    	
+    	User user = userDetailsImpl.getUser();
+    	String email = user.getEmail();
     	if (user != null) {
     		// ユーザーのサブスクリプション情報を取得
-    		Subscription subscription = user.getSubscription();
+    		Subscription subscription = user.getSubscriptions();
     		if(subscription != null) {
     			// Stripe サービスを利用してサブスクリプションをキャンセル
     			stripeService.cancelSubscription(subscription.getStripeSubscriptionId());
     			// サブスクリプションの開始日と終了日をクリア（解除処理）
     			subscription.setSubscriptionStartDate(null);
     			subscription.setSubscriptionEndDate(null);
-    			// 更新されたサブスクリプション情報をデータベースに保存
-    			userService.saveSubscription(subscription);
     		}
-    		user.setRole(userService.findRoleByRoleName("ROLE_GENERAL"));//ROLE_GENERALに戻す
-    		userService.save(user); // ユーザーのサブスクリプション情報を更新
-    	}*/
+    		userService.roleDowngrade(email);
+    	}
     	return "redirect:/";
     }
 }
