@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.example.nagoyameshi.entity.Restaurant;
 import com.example.nagoyameshi.repository.RestaurantRepository;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class HomeController {
 	private final RestaurantRepository restaurantRepository;
@@ -19,10 +21,9 @@ public class HomeController {
 	
 	
 	@GetMapping("/")
-	public String index(Model model) {
-		List<Restaurant> newRestaurants = restaurantRepository.findTop6ByOrderByCreatedAtDesc();
-		model.addAttribute("newRestaurants", newRestaurants);
-		return "index";
+	public String index(HttpSession session, Model model) {
+	    List<Restaurant> newRestaurants = restaurantRepository.findTop6ByOrderByCreatedAtDesc();
+	    model.addAttribute("newRestaurants", newRestaurants);
+	    return "index";
 	}
-
 }
