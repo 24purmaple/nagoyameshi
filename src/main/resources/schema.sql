@@ -112,11 +112,9 @@ CREATE TABLE IF NOT EXISTS favorites (
 
 CREATE TABLE IF NOT EXISTS subscriptions (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    subscription_start_date DATE,
-    subscription_end_date DATE,
-    stripe_customer_id VARCHAR(255) NOT NULL UNIQUE,
-    stripe_subscription_id VARCHAR(255) NOT NULL UNIQUE,
-    user_id INT,
+    stripe_customer_id VARCHAR(255) NOT NULL,
+    stripe_subscription_id VARCHAR(255) NOT NULL,
+    user_id INT NOT NULL UNIQUE,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 

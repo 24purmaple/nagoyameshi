@@ -6,8 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.nagoyameshi.entity.Subscription;
 import com.example.nagoyameshi.entity.User;
+import com.example.nagoyameshi.repository.SubscriptionRepository;
 import com.example.nagoyameshi.security.UserDetailsImpl;
 import com.example.nagoyameshi.service.StripeService;
 import com.example.nagoyameshi.service.UserService;
@@ -21,10 +24,12 @@ public class SubscriptionController {
 
 	private final StripeService stripeService;
 	private final UserService userService;
+	private final SubscriptionRepository subscriptionRepository;
 	
-	public SubscriptionController(StripeService stripeService, UserService userService) {
+	public SubscriptionController(StripeService stripeService, UserService userService, SubscriptionRepository subscriptionRepository) {
 		this.stripeService = stripeService;
 		this.userService = userService;
+		this.subscriptionRepository = subscriptionRepository;
 	}
 	
 	//有料プラン登録ページの表示
@@ -46,28 +51,6 @@ public class SubscriptionController {
         }
         return "redirect:/subscription/success";
 	}
-	
-	// 有料プランの登録処理
-
-    
-    
-    //@ModelAttribute("subscriptionForm") SubscriptionForm subscriptionForm
-    /*@PostMapping("/register")
-    public String processSubscription(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, SubscriptionForm subscriptionForm) {
-    	User user = userDetailsImpl.getUser();
-    	if (user != null) {
-    		//Stripeのセッションを作成
-    		String sessionId = stripeService.createStripeSession(user, subscriptionForm);
-    		//Stripeの決済ページにリダイレクト
-    		return "redirece:https://checkout.stripe.com/pay" + sessionId;
-    		/*user.setSubscriptionStartDate(LocalDate.now());//現時刻を開始日とする
-    		user.setSubscriptionEndDate(LocalDate.now().plusMonths(1));//開始日から1ヶ月後を終了日とする
-    		user.setRole(userService.findRoleByName("ROLE_MEMBER"));//ROLE_MEMBERにする
-    		userService.save(user); // ユーザーのサブスクリプション情報を更新 /
-    	}
-        
-        return "redirect:/subscription/success";
-    }*/
     
     //有料プラン解除ページの表示
   	@GetMapping("/cancel")
@@ -77,22 +60,23 @@ public class SubscriptionController {
   	
     // 有料プラン解除メソッド
     @PostMapping("/cancel")
-    public String cancelSubscription(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+    public String cancelSubscription(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, RedirectAttributes redirectAttributes) {
     	// 認証されたユーザー情報を取得
     	User user = userDetailsImpl.getUser();
     	String email = user.getEmail();
     	if (user != null) {
-    		// ユーザーのサブスクリプション情報を取得
-    		Subscription subscription = user.getSubscriptions();
+    		// ユーザーに関連するサブスクリプションを検索
+    		Subscription subscription = subscriptionRepository.findByUser(user);
     		if(subscription != null) {
     			// Stripe サービスを利用してサブスクリプションをキャンセル
     			stripeService.cancelSubscription(subscription.getStripeSubscriptionId());
-    			// サブスクリプションの開始日と終了日をクリア（解除処理）
-    			subscription.setSubscriptionStartDate(null);
-    			subscription.setSubscriptionEndDate(null);
     		}
     		userService.roleDowngrade(email);
     	}
+    	
+    	// 成功メッセージを追加
+        redirectAttributes.addFlashAttribute("successMessage", "有料プランをキャンセルしました。");
+        
     	return "redirect:/";
     }
 }

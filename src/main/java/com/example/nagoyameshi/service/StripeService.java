@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.repository.SubscriptionRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
@@ -18,6 +17,7 @@ import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class StripeService {
@@ -61,7 +61,7 @@ public class StripeService {
 						.setQuantity(1L)
 						.build())
 				.setMode(SessionCreateParams.Mode.SUBSCRIPTION)
-				.setSuccessUrl(requestUrl.replace("/subscription/confirm", ""))
+				.setSuccessUrl(requestUrl.replace("/subscription/confirm", "?upgrade"))
 				.setCancelUrl(requestUrl.replace("/confirm",""))
 				.build();
 		try {
@@ -74,7 +74,7 @@ public class StripeService {
 	}
     
 	// セッションから顧客のIDから情報を取得し、ReservationServiceとUserServiceクラスを介してデータベースに登録する
-	public void processSessionCompleted(Event event) {
+	public void processSessionCompleted(Event event, HttpSession httpSession) {
 	    System.out.println("Webhook Event Received: " + event.getType());
 
 	    Optional<StripeObject> optionalStripeObject = event.getDataObjectDeserializer().getObject();
@@ -113,49 +113,8 @@ public class StripeService {
 	        System.err.println("Event Type: " + event.getType());
 	        System.err.println("Stripe API Version: " + event.getApiVersion());
 	        System.err.println("stripe-java Version: " + Stripe.VERSION);
-	        
-	     // 手動デシリアライズを試みる
-	        String rawJson = event.getDataObjectDeserializer().getRawJson();
-	        System.out.println("Raw JSON: " + rawJson);
-	        try {
-	            ObjectMapper objectMapper = new ObjectMapper();
-	            Session session = objectMapper.readValue(rawJson, Session.class);
-	            System.out.println("Manually deserialized Session: " + session);
-	        } catch (Exception e) {
-	            System.err.println("Manual deserialization failed: " + e.getMessage());
-	            e.printStackTrace();
-	        }
 	    });
 	}
-
-	
-	public void updateSubscription(Event event) {
-	    Optional<StripeObject> optionalStripeObject = event.getDataObjectDeserializer().getObject();
-	    optionalStripeObject.ifPresentOrElse(stripeObject -> {
-	        System.out.println("サブスクリプションの更新処理が成功しました。");
-	        System.out.println("Stripe API Version:" + event.getApiVersion());
-	        System.out.println("stripe-java Version:" + Stripe.VERSION);
-	        Session session = (Session) stripeObject;
-	        String stripeCustomerId = session.getCustomer();
-	        String stripeSubscriptionId = session.getSubscription();
-	        
-	        try {
-	            Customer customer = Customer.retrieve(stripeCustomerId);
-	            String email = customer.getEmail();
-	            
-	            subscriptionService.update(email, stripeSubscriptionId);
-	            userService.roleUpgrade(email);
-	        } catch (StripeException e) {
-	            e.printStackTrace();
-	        }
-	    },
-	    () -> {
-	        System.out.println("サブスクリプションの更新処理が失敗しました。");
-	        System.out.println("Stripe API Version:" + event.getApiVersion());
-	        System.out.println("stripe-java Version:" + Stripe.VERSION);
-	    });
-	}
-
 
 	// サブスクリプションをキャンセルするメソッド（手動）
     public void cancelSubscription(String subscriptionId) {

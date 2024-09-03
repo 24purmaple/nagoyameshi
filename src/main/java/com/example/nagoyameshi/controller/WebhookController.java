@@ -14,6 +14,9 @@ import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
 import com.stripe.net.Webhook;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 public class WebhookController {
 
@@ -32,7 +35,7 @@ public class WebhookController {
     }
 
     @PostMapping("/stripe/webhook")
-    public ResponseEntity<String> handleStripeEvent(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) {
+    public ResponseEntity<String> handleStripeEvent(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader, HttpServletRequest request) {
         Stripe.apiKey = stripeApiKey;
         Event event = null;
         try {
@@ -43,13 +46,11 @@ public class WebhookController {
             return ResponseEntity.badRequest().build();
         }
        
+        HttpSession httpSession = request.getSession();
+        
         // セッションが完了したとき（checkout.session.completed時に）stripeServiceでデータを登録する
         if ("checkout.session.completed".equals(event.getType())) {
-        	stripeService.processSessionCompleted(event);
-        	
-        // 請求書の支払いが成功したとき (invoice.payment_succeeded時) の処理
-        } else if ("invoice.payment_succeeded".equals(event.getType())) {
-        	stripeService.updateSubscription(event);
+        	stripeService.processSessionCompleted(event, httpSession);
         	
         // サブスクリプションが削除されたとき (customer.subscription.deleted時) stripeServiceでデータを削除する
         } else if ("customer.subscription.deleted".equals(event.getType())) {
