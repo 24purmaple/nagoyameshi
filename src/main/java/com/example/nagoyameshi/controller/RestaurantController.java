@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.nagoyameshi.entity.Category;
 import com.example.nagoyameshi.entity.Favorite;
 import com.example.nagoyameshi.entity.Restaurant;
 import com.example.nagoyameshi.entity.Review;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.ReservationInputForm;
+import com.example.nagoyameshi.repository.CategoryRepository;
 import com.example.nagoyameshi.repository.FavoriteRepository;
 import com.example.nagoyameshi.repository.RestaurantRepository;
 import com.example.nagoyameshi.repository.ReviewRepository;
@@ -36,6 +38,7 @@ public class RestaurantController {
 	private final ReviewService reviewService;
 	private final FavoriteRepository favoriteRepository;
 	private final FavoriteService favoriteService;
+	private final CategoryRepository categoryRepository;
 	
 	public RestaurantController(
 			RestaurantService restaurantService,
@@ -43,13 +46,16 @@ public class RestaurantController {
 			ReviewRepository reviewRepository,
 			ReviewService reviewService,
 			FavoriteService favoriteService,
-			FavoriteRepository favoriteRepository) {
+			FavoriteRepository favoriteRepository,
+			CategoryRepository categoryRepository
+			) {
 		this.restaurantService = restaurantService;
 		this.restaurantRepository = restaurantRepository;
 		this.reviewRepository = reviewRepository;
 		this.reviewService = reviewService;
 		this.favoriteRepository = favoriteRepository;
 		this.favoriteService = favoriteService;
+		this.categoryRepository = categoryRepository;
 	}
 	
 	@GetMapping
@@ -61,6 +67,10 @@ public class RestaurantController {
 			Model model) 
 	{
 		Page<Restaurant> restaurantPage = restaurantService.searchRestaurants(keyword, null, categoryId, price, order, pageable) ;	
+		
+		List<Category> categories = categoryRepository.findAll();
+		model.addAttribute("categories", categories);
+		model.addAttribute("selectedCategoryId", categoryId);
 		
 		model.addAttribute("restaurantPage", restaurantPage);
 		model.addAttribute("keyword", keyword);

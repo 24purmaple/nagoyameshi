@@ -38,27 +38,12 @@
 								<div class="card-body">
 									<form method="get" th:action="@{/restaurants}" class="w-100">
 										<div class="form-group mb-3">
-											<!--<div class="form-group row mb-3">
-												<div class="col-md-4">
-													<label for="category" class="col-form-label text-md-left fw-bold">カテゴリ</label>
-												</div>
-												<div class="col-md-8">
-													<select class="form-control form-select" name="category">
-														<option value="" hidden>選択してください</option>
-														<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}" th:selected="${category.id == selectedCategoryId}"></option>
-													</select>
-													<div th:if="${#fields.hasErrors('category')}" class="text-danger small mb-2" th:errors="*{category}"></div>
-												</div>
-											</div>--><!--カテゴリを選択できるようにしたい-->
-											<select class="form-control form-select" name="area">
-												<option value="" hidden>選択してください</option>   
-		                                           <optgroup label="北海道">                                      
-		                                           	<option value="北海道" th:selected="${area == '北海道'}">北海道</option>
-		                                        </optgroup>                
-		                                        <optgroup label="沖縄">
-		                                            <option value="沖縄県" th:selected="${area == '沖縄県'}">沖縄県</option>
-		                                        </optgroup>
+												
+											<select class="form-control form-select" name="category">
+												<option value="" hidden>選択してください</option>
+												<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}" th:selected="${category.id == selectedCategoryId}"></option>
 											</select>
+											
 										</div>
 										<div class="form-group">
 											<button type="submit" class="btn text-white shadow-sm w-100 nagoyameshi-btn">検索</button>
@@ -73,33 +58,26 @@
 								</div>
 								<div class="card-body">
 									<form method="get" th:action="@{/restaurants}" class="w-100">
+										
 										<div class="form-group mb-3">
-											<label for="minPrice">最低価格</label>
-											<input type="number" class="form-control" name="minPrice" th:value="${minPrice}">
-										</div>
-										<div class="form-group mb-3">
-											<label for="maxPrice">最高価格</label>
-											<input type="number" class="form-control" name="maxPrice" th:value="${maxPrice}">
-										</div><!-- 最低価格と最高価格をそれぞれ入力して範囲内の店舗を表示させたい -->
-										<div class="form-group mb-3">
-											<select class="form-control form-select" name="maxPrice">
+											<select class="form-control form-select" name="price">
 												<option value="" hidden>選択してください</option>
-												<option value="500" th:selected="${maxPrice == 500}">500円以内</option>
-												<option value="1000" th:selected="${maxPrice == 1000}">1,000円以内</option>
-												<option value="1500" th:selected="${maxPrice == 1500}">1,500円以内</option>
-												<option value="2000" th:selected="${maxPrice == 2000}">2,000円以内</option>
-												<option value="2500" th:selected="${maxPrice == 2500}">2,500円以内</option>
-												<option value="3000" th:selected="${maxPrice == 3000}">3,000円以内</option>
-												<option value="3500" th:selected="${maxPrice == 3500}">3,500円以内</option>
-												<option value="4000" th:selected="${maxPrice == 4000}">4,000円以内</option>
-												<option value="4500" th:selected="${maxPrice == 4500}">4,500円以内</option>
-												<option value="5000" th:selected="${maxPrice == 5000}">5,000円以内</option>
-												<!--<option value="5001" th:selected="${maxPrice == 5001}">5,000円以上</option>-->
-												<option value="6000" th:selected="${maxPrice == 6000}">6,000円以内</option>
-												<option value="7000" th:selected="${maxPrice == 7000}">7,000円以内</option>
-												<option value="8000" th:selected="${maxPrice == 8000}">8,000円以内</option>
-												<option value="9000" th:selected="${maxPrice == 9000}">9,000円以内</option>
-												<option value="10000" th:selected="${maxPrice == 10000}">10,000円以内</option>
+												<option value="500" th:selected="${price == 500}">500円以内</option>
+												<option value="1000" th:selected="${price == 1000}">1,000円以内</option>
+												<option value="1500" th:selected="${price == 1500}">1,500円以内</option>
+												<option value="2000" th:selected="${price == 2000}">2,000円以内</option>
+												<option value="2500" th:selected="${price == 2500}">2,500円以内</option>
+												<option value="3000" th:selected="${price == 3000}">3,000円以内</option>
+												<option value="3500" th:selected="${price == 3500}">3,500円以内</option>
+												<option value="4000" th:selected="${price == 4000}">4,000円以内</option>
+												<option value="4500" th:selected="${price == 4500}">4,500円以内</option>
+												<option value="5000" th:selected="${price == 5000}">5,000円以内</option>
+												<!--<option value="5001" th:selected="${price == 5001}">5,000円以上</option>-->
+												<option value="6000" th:selected="${price == 6000}">6,000円以内</option>
+												<option value="7000" th:selected="${price == 7000}">7,000円以内</option>
+												<option value="8000" th:selected="${price == 8000}">8,000円以内</option>
+												<option value="9000" th:selected="${price == 9000}">9,000円以内</option>
+												<option value="10000" th:selected="${price == 10000}">10,000円以内</option>
 											</select>
 										</div>
 										<div class="form-group">
@@ -117,8 +95,8 @@
                                 
                                 <form method="get" th:action="@{/restaurants}" class="mb-3 nagoyameshi-sort-box">
 									<input th:if="${keyword}" type="hidden" name="keyword" th:value="${keyword}">
-									<input th:if="${area}" type="hidden" name="area" th:value="${area}">
-									<input th:if="${maxPrice}" type="hidden" name="maxPrice" th:value="${maxPrice}">
+									<input th:if="${selectedCategoryId}" type="hidden" name="category" th:value="${selectedCategoryId}">
+									<input th:if="${price}" type="hidden" name="price" th:value="${price}">
 									<select class="form-select form-select-sm" name="order" onChange="this.form.submit();">
 										<option value="createdAtDesc" th:selected="${order == 'createdAtDesc' || order == null}">新着順</option>
 										<option value="minPriceAsc" th:selected="${order == 'minPriceAsc'}">料金が安い順</option>
@@ -167,15 +145,15 @@
 									<ul class="pagination">
 										<li class="page-item">
 											<span th:if="${restaurantPage.isFirst()}" class="page-link disabled">前</span>
-											<a th:unless="${restaurantPage.isFirst()}" th:href="@{/restaurants(page = ${restaurantPage.getNumber() - 1}, keyword = ${keyword}, area = ${area}, price = ${maxPrice}, order = ${order})}" class="page-link nagoyameshi-page-link">前</a>
+											<a th:unless="${restaurantPage.isFirst()}" th:href="@{/restaurants(page = ${restaurantPage.getNumber() - 1}, keyword = ${keyword}, area = ${area}, price = ${price}, order = ${order})}" class="page-link nagoyameshi-page-link">前</a>
 										</li>
 										<li th:each="i : ${#numbers.sequence(0, restaurantPage.getTotalPages() - 1)}" class="page-item">
 											<span th:if="${i == restaurantPage.getNumber()}" class="page-link active nagoyameshi-active" th:text="${i + 1}"></span>
-											<a th:unless="${i == restaurantPage.getNumber()}" th:href="@{/restaurants(page = ${i}, keyword = ${keyword}, area = ${area}, price = ${maxPrice}, order = ${order})}" class="page-link nagoyameshi-page-link" th:text="${i + 1}"></a>
+											<a th:unless="${i == restaurantPage.getNumber()}" th:href="@{/restaurants(page = ${i}, keyword = ${keyword}, area = ${area}, price = ${price}, order = ${order})}" class="page-link nagoyameshi-page-link" th:text="${i + 1}"></a>
 										</li>
 										<li class="page-item">
 											<span th:if="${restaurantPage.isLast()}" class="page-link disabled">次</span>
-											<a th:unless="${restaurantPage.isLast()}" th:href="@{/restaurants(page = ${restaurantPage.getNumber() + 1}, keyword = ${keyword}, area = ${area}, price = ${maxPrice}, order = ${order})}" class="page-link nagoyameshi-page-link">次</a>
+											<a th:unless="${restaurantPage.isLast()}" th:href="@{/restaurants(page = ${restaurantPage.getNumber() + 1}, keyword = ${keyword}, area = ${area}, price = ${price}, order = ${order})}" class="page-link nagoyameshi-page-link">次</a>
 										</li>
 									</ul>
 								</nav>

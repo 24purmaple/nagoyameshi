@@ -170,7 +170,7 @@ public class RestaurantService {
             } else {
                 restaurantPage = restaurantRepository.findByMinPriceLessThanEqualOrderByCreatedAtDesc(price, pageable);
             }
-        } else if(keyword == null|| keyword.isEmpty() && categoryId == null &&price == null){
+        } else {
         	if (order != null && order.equals("minPriceAsc")) {
                 restaurantPage = restaurantRepository.findAllByOrderByMinPriceAsc(pageable);
             } else if (order != null && order.equals("maxPriceDesc")) {
@@ -180,11 +180,7 @@ public class RestaurantService {
             } else {
                 restaurantPage = restaurantRepository.findAllByOrderByCreatedAtDesc(pageable);
             }
-        } else {
-            restaurantPage = restaurantRepository.findAll(pageable);
         }
-
         return restaurantPage;
     }
-
 }
