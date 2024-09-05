@@ -128,13 +128,18 @@ CREATE TABLE IF NOT EXISTS histories (
 	FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-CREATE TABLE IF NOT EXISTS company_info (
+CREATE TABLE IF NOT EXISTS company (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     company_name VARCHAR(255) NOT NULL,
-    description TEXT,
-    address VARCHAR(255),
-    phone_number VARCHAR(20),
-    email VARCHAR(255),
+    postal_code VARCHAR(50),
+    address VARCHAR(255) NOT NULL,
+    managing_director VARCHAR(255) NOT NULL,
+    established DATE NOT NULL,
+    capital INT NOT NULL,
+    service TEXT,
+    employees INT NOT NULL,
+    phone_number VARCHAR(50) NOT NULL,
+    email VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

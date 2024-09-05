@@ -91,15 +91,13 @@ INSERT IGNORE INTO histories (id, user_id, restaurant_id) VALUES (1, 3, 1 );
 INSERT IGNORE INTO histories (id, user_id, restaurant_id) VALUES (2, 3, 2 );
 INSERT IGNORE INTO histories (id, user_id, restaurant_id) VALUES (3, 3, 3 );
 
+-- company_infoテーブルにデータを挿入
+INSERT IGNORE INTO company (id, company_name, postal_code, address, managing_director, established, capital, service, employees, phone_number, email) VALUES (1, 'NAGOYAMESHI株式会社', '101-0022', '東京都千代田区神田練塀町300番地 住友不動産秋葉原駅前ビル5F', '侍 太郎', '2015-03-19', 11000000, '飲食店等の情報提供サービス', 81, '123-4567-8901', 'company@example.com');
+
 /*-- policyテーブルにデータを挿入
 INSERT IGNORE INTO policies (id, policy_text, effective_date) VALUES (1, '利用規約1', '2024-01-01');
 INSERT IGNORE INTO policies (id, policy_text, effective_date) VALUES (2, '利用規約2', '2024-02-01');
 INSERT IGNORE INTO policies (id, policy_text, effective_date) VALUES (3, '利用規約3', '2024-03-01');
-
--- company_infoテーブルにデータを挿入
-INSERT IGNORE INTO company_info (id, company_name, description, address, phone_number, email) VALUES (1, '株式会社A', '飲食店情報サービス', '東京都渋谷区1-1-1', '03-1111-2222', 'info@companyA.co.jp');
-INSERT IGNORE INTO company_info (id, company_name, description, address, phone_number, email) VALUES (2, '株式会社B', 'オンライン予約サービス', '東京都新宿区2-2-2', '03-2222-3333', 'info@companyB.co.jp');
-INSERT IGNORE INTO company_info (id, company_name, description, address, phone_number, email) VALUES (3, '株式会社C', 'レストランレビューサイト', '東京都品川区3-3-3', '03-3333-4444', 'info@companyC.co.jp');
 
 -- edit_historyテーブルにデータを挿入
 INSERT IGNORE INTO edit_histories (id, user_id, edited_table, record_id, action_type) VALUES (1, 3, 'restaurants', 1, 'update');
