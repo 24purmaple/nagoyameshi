@@ -18,8 +18,8 @@ public class WebSecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/css/**", "/images/**", "/js/**", "/storage/**", "/", "/signup/**", "/restaurants", "/restaurants/{id}", "/stripe/webhook", "/restaurants/{id}/reviews", "/request_reset_password/**", "/reset_password/**").permitAll()	// すべてのユーザーにアクセスを許可するURL
-				.requestMatchers("/admin/**").hasRole("ADMIN")	// 管理者にのみアクセスを許可するURL
+				.requestMatchers("/css/**", "/images/**", "/js/**", "/storage/**", "/", "/signup/**", "/restaurants", "/restaurants/{id}", "/stripe/webhook", "/restaurants/{id}/reviews", "/request_reset_password/**", "/reset_password/**", "/company").permitAll()	// すべてのユーザーにアクセスを許可するURL
+				.requestMatchers("/admin/**", "/company/edit").hasRole("ADMIN")	// 管理者にのみアクセスを許可するURL
 				.requestMatchers("/favorites/**","/reviews/edit", "/reviews/register","/cancel").hasRole("MEMBER")	// 有料会員にのみアクセスを許可するURL
 				.anyRequest().authenticated()	// 上記以外のURLはログインが必要（会員または管理者のどちらでもOK）
 			)

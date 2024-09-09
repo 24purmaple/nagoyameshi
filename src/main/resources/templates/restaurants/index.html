@@ -105,7 +105,7 @@
 									</select>
 								</form>
 							</div>
-							<!-- 一覧表示で、1店舗しか表示されない -->
+
 							<div class="mb-3" th:each="restaurant : ${restaurantPage}">
                                 <a th:href="@{/restaurants/__${restaurant.getId()}__}" class="link-dark nagoyameshi-card-link">
                                     <div class="card h-100">   
@@ -119,6 +119,11 @@
                                                     <h3 class="card-title mb-3" th:text="${restaurant.getRestaurantName()}"></h3>                                            
  
                                                     <hr class="mb-3">
+                                                    
+                                                     <!-- カテゴリ名を表示 みかん -->
+                                                    <p class="card-text mb-2">
+														<span th:each="category : ${restaurant.restaurantsCategory}" th:text="${category.category.categoryName}">カテゴリ名</span>
+													</p>
                                                      
                                                     <p class="card-text mb-2">
                                                         <span th:text="${restaurant.getDescription()}"></span>
