@@ -38,12 +38,6 @@ public class RestaurantEditForm {
 	@Max(value = 999999, message = "最大料金は999999円以下に設定してください。")
 	private Integer maxPrice;
 	
-	/*
-	@NotNull(message = "料金目安を入力してください。")
-	@Range(min = 1, max = 999999, message = "料金目安は1円以上999999円以下に設定してください。")
-	private Integer Price;
-	*/
-	
 	@NotNull(message = "定員を入力してください。")
 	@Min(value = 1, message = "定員は1人以上に設定してください。")
 	private Integer capacity;
