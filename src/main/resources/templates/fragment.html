@@ -27,8 +27,11 @@
 		<div th:fragment="header" th:remove="tag">
 			<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm nagoyameshi-navbar">
                  <div class="container nagoyameshi-container">
-                     <a class="navbar-brand" th:href="@{/}">                        
-                         <img class="nagoyameshi-logo me-1" th:src="@{/images/logo.png}" alt="NAGOYAMESHI">                        
+                     <a class="navbar-brand" th:href="@{/}">
+						 <div class="d-flex align-items-center">
+                         	<img class="nagoyameshi-logo me-1" th:src="@{/images/logo.png}" alt="NAGOYAMESHI">
+                         	<p style="font-weight: bold; margin-bottom: 0px; font-size: 20px;">NAGOYAMESHI</p>
+						 </div>                        
                      </a>
                      
                      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +56,7 @@
 							 
 								 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownGeneral">
 									 <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/user}">会員情報</a>
-									 <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/histories}">履歴一覧</a>
+									 <!--<a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/histories}">履歴一覧</a>-->
 									 
 									 <div class="dropdown-divider"></div>
 									 
@@ -116,11 +119,12 @@
 		<div th:fragment="footer" th:remove="tag">
 			<footer style="padding: 10px 15px 80px 15px;">
                  <div class="d-flex justify-content-center footer-logo">
-					 <a class="navbar-brand app-name" th:href="@{/}">
+					 <a class="navbar-brand" th:href="@{/}">
 						 <div class="d-flex align-items-center">
-							 <img class="nagoyameshi-logo me-1" th:src="@{/images/logo.png}" alt="NAGOYAMESHI">
-						 </div>
-					 </a>
+                         	<img class="nagoyameshi-logo me-1" th:src="@{/images/logo.png}" alt="NAGOYAMESHI">
+                         	<p style="font-weight: bold; margin-bottom: 0px; font-size: 20px;">NAGOYAMESHI</p>
+						 </div>                        
+                     </a>
                  </div>
                  <div class="d-flex justify-content-center footer-link">
 					 <a th:href="@{/company}" class="link-secondary me-3">会社概要</a>
