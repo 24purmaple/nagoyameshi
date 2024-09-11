@@ -29,7 +29,7 @@
 								</nav>
 								
 								<!-- お気に入り -->
-								<div sec:authorize="isAuthenticated()">
+								<div sec:authorize="isAuthenticated() and hasRole('ROLE_MEMBER')">
 									<div th:if="${hasUserAlreadyFavorited}">
 										<a href="#" onclick="event.preventDefault(); document.getElementById('favorite-form').submit();">&#9829;お気に入り解除</a>
 										<form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/favorites/__${favorite.getId()}__/delete}" id="favorite-form" class="d-none"></form>
@@ -209,7 +209,7 @@
 								</div>
 								
 								<!-- ログインしているユーザーがまだレビューを投稿していない場合のボタン -->
-								<div sec:authorize="isAuthenticated()" th:unless="${hasUserAlreadyReviewed}" class="row justify-content-center mb-4">
+								<div sec:authorize="isAuthenticated() and hasRole('ROLE_MEMBER')" th:unless="${hasUserAlreadyReviewed}" class="row justify-content-center mb-4">
 									<div class="col-lg-4">
 										<a th:href="@{/restaurants/__${restaurant.getId()}__/reviews/register}" class="btn text-white shadow-sm w-100 nagoyameshi-btn">レビューを投稿する</a>
 									</div>
@@ -257,8 +257,15 @@
 											 </div>
 										 </div>
 		                             </div>
-									<div class="text-center mb-4" th:if="${totalReviewCount > 6}">
-										<a th:href="@{/restaurants/__${restaurant.getId()}__/reviews}">すべてのレビューを見る</a>
+		                             <div sec:authorize="hasRole('ROLE_GENERAL')">
+										 <div class="text-center mb-4" th:if="${totalReviewCount > 6}">
+											 <p>すべてのレビューを閲覧、もしくはレビューを投稿するには有料会員になる必要があります</p>
+										 </div>
+									</div>
+		                             <div sec:authorize="hasRole('ROLE_MEMBER')">
+										 <div class="text-center mb-4" th:if="${totalReviewCount > 6}">
+											 <a th:href="@{/restaurants/__${restaurant.getId()}__/reviews}">すべてのレビューを見る</a>
+										 </div>
 									</div>
 								</div>
 							</div>

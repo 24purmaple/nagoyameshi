@@ -65,7 +65,6 @@ INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES
 INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (3, 3, 3);
 
 -- reviewテーブルにデータを挿入
-INSERT IGNORE INTO reviews (id, user_id, restaurant_id, score, comment) VALUES (1, 2, 1, 4, 'とても美味しかったです。');
 INSERT IGNORE INTO reviews (id, user_id, restaurant_id, score, comment) VALUES (2, 3, 1, 3, '普通の味でした。');
 INSERT IGNORE INTO reviews (id, user_id, restaurant_id, score, comment) VALUES (3, 4, 1, 5, '素晴らしい寿司でした！');
 INSERT IGNORE INTO reviews (id, user_id, restaurant_id, score, comment) VALUES (4, 5, 1, 5, '素晴らしい寿司でした！');
