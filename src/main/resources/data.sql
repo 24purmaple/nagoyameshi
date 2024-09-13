@@ -31,12 +31,12 @@ INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, mi
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (6, '味噌煮込み 一刻', 'restaurant01.jpg', 'こだわりの味噌で煮込んだ絶品の味噌煮込みを提供。アットホームな雰囲気でお待ちしております。', 2000, 5000, 30, '11:00', '21:00', '["土曜日", "日曜日", "祝日"]', '460-0001', '愛知県名古屋市中区栄1-1-1', '052-1111-1111');
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (7, '台湾ラーメン 蓮', 'restaurant02.jpg', '本場の台湾ラーメンを提供するお店。こだわりのスープと自家製麺が自慢です。', 2000, 5000, '11:30', '22:00', 25, '["火曜日", "日曜日", "祝日"]', '460-0002', '愛知県名古屋市中区栄2-2-2', '052-2222-2222');
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (8, '味噌カツ 三春', 'restaurant03.jpg', 'サクサクの衣とジューシーな味噌カツが自慢のお店。地元の人に愛される味をご堪能ください。', 2000, 5000, 40, '11:00', '20:30', '["水曜日"]', '460-0003', '愛知県名古屋市中区栄3-3-3', '052-3333-3333');
-INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (9, 'あんかけスパゲッティ 茜', 'restaurant04.jpg', '濃厚なあんかけソースが特徴のスパゲッティ専門店。リーズナブルで美味しい一品をご提供します。', 1000, 5000, 35, '11:30', '21:30', '[]', '460-0004', '愛知県名古屋市中区栄4-4-4', '052-4444-4444');
+INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (9, 'あんかけスパゲッティ 茜', 'restaurant04.jpg', '濃厚なあんかけソースが特徴のスパゲッティ専門店。リーズナブルで美味しい一品をご提供します。', 1000, 5000, 35, '11:30', '21:30', '["全日営業"]', '460-0004', '愛知県名古屋市中区栄4-4-4', '052-4444-4444');
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (10, '手羽先の名店 かもの屋', 'restaurant05.jpg', '名古屋風手羽先の専門店。ジューシーで香ばしい手羽先を心ゆくまでお楽しみください。', 1000, 4000, 28, '17:00', '23:00', '["月曜日"]', '460-0005', '愛知県名古屋市中区栄5-5-5', '052-5555-5555');
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (11, '味噌炭火焼肉 こはな', 'restaurant06.jpg', 'こだわりの味噌ダレで炭火焼肉を楽しむお店。新鮮な肉と絶妙な調理法が自慢です。', 3000, 6000, 20, '18:00', '00:00', '["火曜日","水曜日"]', '460-0006', '愛知県名古屋市中区栄6-6-6', '052-6666-6666');
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (12, '手作りうどん 蓮華', 'restaurant07.jpg', '自家製の手打ちうどんが自慢のお店。優しい出汁とコシのある麺をお楽しみください。', 1000, 4000, 45, '11:00', '20:00', '["木曜日"]', '460-0007', '愛知県名古屋市中区栄7-7-7', '052-7777-7777');
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (13, '味噌串カツ 串匠', 'restaurant08.jpg', '名古屋名物の味噌串カツを提供するお店。サクサクの衣と味噌の相性が抜群です。', 2000, 5000, 30, '17:30', '22:30', '["土曜日", "日曜日", "祝日"]', '460-0008', '愛知県名古屋市中区栄8-8-8', '052-8888-8888');
-INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (14, 'きしめん専門店 はるや', 'restaurant09.jpg', '名古屋の郷土料理、きしめんを存分に味わえるお店。シンプルながらも風味豊かな逸品です。', 1000, 4000, 30, '12:00', '19:30', '[]', '460-0009', '愛知県名古屋市中区栄9-9-9', '052-9999-9999');
+INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (14, 'きしめん専門店 はるや', 'restaurant09.jpg', '名古屋の郷土料理、きしめんを存分に味わえるお店。シンプルながらも風味豊かな逸品です。', 1000, 4000, 30, '12:00', '19:30', '["全日営業"]', '460-0009', '愛知県名古屋市中区栄9-9-9', '052-9999-9999');
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (15, '味噌カレー こふく', 'restaurant10.jpg', 'こだわりの味噌とカレーが融合した絶品の味噌カレーを提供。スパイスの香りが食欲をそそります。', 2000, 5000, 35, '11:30', '20:30', '["土曜日"]', '460-0010', '愛知県名古屋市中区栄10-10-10', '052-1010-1010');
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (16, 'みそかつ亭', 'restaurant11.jpg', '名古屋の味噌かつをリーズナブルに楽しめるお店。サクサクの衣と濃厚な味噌ソースが自慢です。', 2000, 5000, 35, '11:30', '20:30', '["金曜日"]', '460-0011', '愛知県名古屋市中区栄11-11-11', '052-1111-1111');
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (17, '台湾小吃屋 台湾小', 'restaurant12.jpg', '台湾の風味豊かな小吃（点心）を楽しめるアットホームなお店。本場の味をご堪能ください。', 2000, 5000, 30, '11:00', '21:00', '["火曜日","木曜日"]', '460-0012', '愛知県名古屋市中区栄12-12-12', '052-1212-1212');
@@ -85,24 +85,13 @@ INSERT IGNORE INTO reservations (id, user_id, restaurant_id, reservation_date, r
 INSERT IGNORE INTO reservations (id, user_id, restaurant_id, reservation_date, reservation_time, number_of_people) VALUES (2, 3, 2, '2024-08-02', '18:00', 4 );
 INSERT IGNORE INTO reservations (id, user_id, restaurant_id, reservation_date, reservation_time, number_of_people) VALUES (3, 3, 3, '2024-08-03', '20:00', 3 );
 
--- historyテーブルにデータを挿入
+/*-- historyテーブルにデータを挿入
 INSERT IGNORE INTO histories (id, user_id, restaurant_id) VALUES (1, 3, 1 );
 INSERT IGNORE INTO histories (id, user_id, restaurant_id) VALUES (2, 3, 2 );
-INSERT IGNORE INTO histories (id, user_id, restaurant_id) VALUES (3, 3, 3 );
+INSERT IGNORE INTO histories (id, user_id, restaurant_id) VALUES (3, 3, 3 );*/
 
 -- company_infoテーブルにデータを挿入
 INSERT IGNORE INTO company (id, company_name, postal_code, address, managing_director, established, capital, service, employees, phone_number, email) VALUES (1, 'NAGOYAMESHI株式会社', '101-0022', '東京都千代田区神田練塀町300番地 住友不動産秋葉原駅前ビル5F', '侍 太郎', '2015-03-19', 11000000, '飲食店等の情報提供サービス', 81, '123-4567-8901', 'company@example.com');
 
 /*-- policyテーブルにデータを挿入
-INSERT IGNORE INTO policies (id, policy_text, effective_date) VALUES (1, '利用規約1', '2024-01-01');
-INSERT IGNORE INTO policies (id, policy_text, effective_date) VALUES (2, '利用規約2', '2024-02-01');
-INSERT IGNORE INTO policies (id, policy_text, effective_date) VALUES (3, '利用規約3', '2024-03-01');
-
--- edit_historyテーブルにデータを挿入
-INSERT IGNORE INTO edit_histories (id, user_id, edited_table, record_id, action_type) VALUES (1, 3, 'restaurants', 1, 'update');
-INSERT IGNORE INTO edit_histories (id, user_id, edited_table, record_id, action_type) VALUES (2, 3, 'review', 2, 'insert');
-INSERT IGNORE INTO edit_histories (id, user_id, edited_table, record_id, action_type) VALUES (3, 3, 'favorite', 3, 'delete');
-
--- subscriptionテーブル
-INSERT IGNORE INTO subscriptions (subscription_start_date, subscription_end_date, stripe_customer_id, stripe_subscription_id, user_id) VALUES ('2023-01-01', '2023-01-31', 'cus_test1', 'sub_test1');
-INSERT IGNORE INTO subscriptions (subscription_start_date, subscription_end_date, stripe_customer_id, stripe_subscription_id, user_id) VALUES ('2023-02-01', '2024-01-31', 'cus_test2', 'sub_test2'); */
+INSERT IGNORE INTO policies (id, policy_text, effective_date) VALUES (1, '利用規約1', '2024-01-01');*/

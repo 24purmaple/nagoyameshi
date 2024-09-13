@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,7 +28,7 @@ public class RestaurantEditForm {
 	@NotBlank(message = "説明を入力してください。")
 	private String description;
 
-	@NotNull(message = "カテゴリを選択してください。")
+	@NotEmpty(message = "カテゴリを選択してください。")
     private List<Integer> categoryIds;
 
 	@NotNull(message = "最小料金を入力してください。")
@@ -48,7 +49,7 @@ public class RestaurantEditForm {
 	@NotNull(message = "閉店時間を入力してください。")
 	private LocalTime closingTime;
 	
-	@NotNull(message = "定休日を入力してください。")
+	@NotEmpty(message = "定休日を選択してください。")
 	private List<String> closedDays;
 	
 	@NotBlank(message = "郵便番号を入力してください。")
