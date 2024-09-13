@@ -1,5 +1,6 @@
 package com.example.nagoyameshi.service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -19,11 +20,13 @@ public class ReservationService {
 	private final ReservationRepository reservationRepository;
 	private final RestaurantRepository restaurantRepository;
 	private final UserRepository userRepository;
+	private final HolidayService holidayService;
 	
-	public ReservationService(ReservationRepository reservationRepository, RestaurantRepository restaurantRepository, UserRepository userRepository) {
+	public ReservationService(ReservationRepository reservationRepository, RestaurantRepository restaurantRepository, UserRepository userRepository, HolidayService holidayService) {
 		this.reservationRepository = reservationRepository;
 		this.restaurantRepository = restaurantRepository;
 		this.userRepository = userRepository;
+		this.holidayService = holidayService;
 	}
 	
 	@Transactional
@@ -51,32 +54,72 @@ public class ReservationService {
 	public boolean isWithinCapacity(Integer numberOfPeople, Integer capacity) {
 		return numberOfPeople <= capacity;
 	}
-	
-	/* 予約時間と予約日が営業時間外、もしくは定休日の場合を考えたが定休日を曜日で管理していないため使用できない
-	 * public static String isWithinTime(Restaurant restaurant, ReservationInputForm reservationInput) {
-	    // 予約日と予約時間を取得
-	    LocalDate reservationDate = reservationInput.getParsedReservationDate();
-	    LocalTime reservationTime = reservationInput.getParsedReservationTime();
 
-	    // 定休日のチェック
-	    // 予約日の曜日を取得
-	    DayOfWeek reservationDayOfWeek = reservationDate.getDayOfWeek();
-
-	    // 定休日が曜日で管理されている場合のチェック
-	    if (restaurant.getClosedDays().contains(reservationDayOfWeek.toString())) {
-	        return "エラー: 予約日はレストランの定休日です。 (" + reservationDayOfWeek.toString() + ")";
-	    }
-
-	    // 営業時間内のチェック
+	// 営業時間チェック
+	public boolean isWithinBusinessHours(Restaurant restaurant, LocalTime reservationTime) {
+	    //レストランの開店時間と閉店時間を取得
 	    LocalTime openingTime = restaurant.getOpeningTime();
 	    LocalTime closingTime = restaurant.getClosingTime();
+	    // 閉店時間が開店時間より前の場合は、営業時間が夜をまたぐ
+	    boolean isOvernight = closingTime.isBefore(openingTime);
 
-	    // 予約時間が開店時間より前または閉店時間と同じか後の場合、エラーメッセージを返す
-	    if (reservationTime.isBefore(openingTime) || !reservationTime.isBefore(closingTime)) {
-	        return "エラー: 予約時間がレストランの営業時間外です。";
+	    if (isOvernight) {
+	    	// 夜をまたぐ営業時間の場合、開店時間以降または閉店時間以前なら営業中
+	        return reservationTime.isAfter(openingTime) || reservationTime.isBefore(closingTime);
+	    } else {
+	    	// 通常の営業時間の場合、開店時間以降かつ閉店時間以前なら営業中
+	        return !reservationTime.isBefore(openingTime) && !reservationTime.isAfter(closingTime);
+	    }
+	}
+
+	// 定休日チェック
+	public boolean isNotHoliday(Restaurant restaurant, LocalDate reservationDate) {
+		// 予約日の曜日を取得し、その文字列表現を取得
+		DayOfWeek dayOfWeek = reservationDate.getDayOfWeek();
+	    String dayString = convertDayOfWeekToString(dayOfWeek);
+
+	    // レストランの定休日リストにその日が含まれているか確認
+	    boolean isHoliday = restaurant.getClosedDays().contains(dayString);
+
+	    // 祝日もチェック
+	    if (isPublicHoliday(reservationDate)) {
+	        isHoliday = isHoliday || restaurant.getClosedDays().contains("祝日");
 	    }
 
-	    // 予約時間が有効であることを示すメッセージを返す
-	    return "予約時間は有効です。";
-	}*/
+	    // 定休日でなければtrue
+	    return !isHoliday;
+	}
+
+	//getDayOfWeekで取得した曜日(MONDAYなど)の情報を変換する
+	private String convertDayOfWeekToString(DayOfWeek dayOfWeek) {
+	    switch (dayOfWeek) {
+	        case MONDAY: return "月曜日";
+	        case TUESDAY: return "火曜日";
+	        case WEDNESDAY: return "水曜日";
+	        case THURSDAY: return "木曜日";
+	        case FRIDAY: return "金曜日";
+	        case SATURDAY: return "土曜日";
+	        case SUNDAY: return "日曜日";
+	        default: return "";
+	    }
+	}
+
+	private boolean isPublicHoliday(LocalDate date) {
+	    // 祝日判定ロジック
+		int year = date.getYear();
+		//固定祝日
+		if(holidayService.getFixedHolidays(year).contains(date)) {
+			return true;
+		}
+		//移動祝日
+		if(holidayService.isMovingHoliday(date)) {
+			return true;
+		}
+	    return false;
+	}
+	
+	public boolean isOpenAllYear(Restaurant restaurant) {
+	    return restaurant.getClosedDays() == null || restaurant.getClosedDays().isEmpty();
+	}
+
 }

@@ -2,9 +2,13 @@ package com.example.nagoyameshi.entity;
 
 import java.sql.Timestamp;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 
+import com.example.nagoyameshi.convert.ListToJsonConverter;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -46,8 +50,9 @@ public class Restaurant {
 	@Column(name = "closing_time")
 	private LocalTime closingTime;
 	
-	@Column(name = "closed_days")
-	private String closedDays;
+	@Convert(converter = ListToJsonConverter.class)
+    @Column(columnDefinition = "json")
+    private List<String> closedDays;  // 例: "月", "火", "祝" などの文字列
 	
 	@Column(name = "postal_code")
 	private String postalCode;

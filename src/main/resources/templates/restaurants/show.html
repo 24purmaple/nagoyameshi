@@ -94,9 +94,8 @@
 											<div class="col-4">
 												<span class="fw-bold">定休日</span>
 											</div>
-											
 											<div class="col">
-												<span th:text="${restaurant.getClosedDays}"></span>
+												<span th:each="day : ${restaurant.closedDays}" th:text="${day} + ${dayStat.index < restaurant.closedDays.size() - 1 ? ', ' : ''}"></span>
 											</div>
 										</div>
 										

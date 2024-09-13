@@ -65,8 +65,11 @@ public class ReservationController {
 	{
 		Restaurant restaurant = restaurantRepository.getReferenceById(id);
 		Integer numberOfPeople = reservationInputForm.getNumberOfPeople();
+		LocalDate reservationDate = reservationInputForm.getParsedReservationDate();
+		LocalTime reservationTime = reservationInputForm.getParsedReservationTime();
 		Integer capacity = restaurant.getCapacity();
 		
+		//予約定員のチェック
 		if(numberOfPeople != null) {
 			if (!reservationService.isWithinCapacity(numberOfPeople, capacity)) {
 				FieldError fieldError = new FieldError(bindingResult.getObjectName(), "numberOfPeople", "予約人数が定員を超えています。");
@@ -74,6 +77,22 @@ public class ReservationController {
 			}
 		}
 		
+		// 予約日のチェックとエラーメッセージの設定
+	    if (reservationDate != null) {
+	        if (!reservationService.isNotHoliday(restaurant, reservationDate)) {
+	        	FieldError fieldError = new FieldError(bindingResult.getObjectName(), "reservationDate", "定休日です。");
+	        	bindingResult.addError(fieldError);
+	        }
+	    }
+
+	    // 予約時間のチェックとエラーメッセージの設定
+	    if (reservationTime != null) {
+	    	if (!reservationService.isWithinBusinessHours(restaurant, reservationTime)) {
+	    		FieldError fieldError = new FieldError(bindingResult.getObjectName(), "reservationTime", "営業時間外です。");
+	    		bindingResult.addError(fieldError);
+	    	}
+	    }
+				
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("restaurant", restaurant);
 			model.addAttribute("errorMessage", "予約内容に不備があります。");
@@ -81,7 +100,7 @@ public class ReservationController {
 		}
 		
 		redirectAttributes.addFlashAttribute("reservationInputForm", reservationInputForm);
-		
+	    
 		return "redirect:/restaurants/{id}/reservations/confirm";
 	}
 	

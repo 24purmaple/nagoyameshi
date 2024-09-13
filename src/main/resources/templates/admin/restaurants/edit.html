@@ -120,10 +120,43 @@
 									<div class="col-md-4">
 										<label for="closedDays" class="col-form-label text-md-left fw-bold">定休日</label>
 									</div>
-									<div class="col-md-8">
-										<div th:if="${#fields.hasErrors('closedDays')}" class="text-danger small mb-2" th:errors="*{closedDays}"></div>
-										<input type="text" class="form-control" th:field="*{closedDays}" autofocus>
-									</div>
+								    <div class="col-md-8">
+								        <div th:if="${#fields.hasErrors('closedDays')}" class="text-danger small mb-2" th:errors="*{closedDays}"></div>
+								        
+								        <!-- 定休日のチェックボックスリスト -->
+								        <div class="form-check form-check-inline">
+								            <input type="checkbox" class="form-check-input" th:value="'月曜日'" th:field="*{closedDays}" id="closedDayMonday">
+								            <label class="form-check-label" for="closedDayMonday">月曜日</label>
+								        </div>
+								        <div class="form-check form-check-inline">
+								            <input type="checkbox" class="form-check-input" th:value="'火曜日'" th:field="*{closedDays}" id="closedDayTuesday">
+								            <label class="form-check-label" for="closedDayTuesday">火曜日</label>
+								        </div>
+								        <div class="form-check form-check-inline">
+								            <input type="checkbox" class="form-check-input" th:value="'水曜日'" th:field="*{closedDays}" id="closedDayWednesday">
+								            <label class="form-check-label" for="closedDayWednesday">水曜日</label>
+								        </div>
+								        <div class="form-check form-check-inline">
+								            <input type="checkbox" class="form-check-input" th:value="'木曜日'" th:field="*{closedDays}" id="closedDayThursday">
+								            <label class="form-check-label" for="closedDayThursday">木曜日</label>
+								        </div>
+								        <div class="form-check form-check-inline">
+								            <input type="checkbox" class="form-check-input" th:value="'金曜日'" th:field="*{closedDays}" id="closedDayFriday">
+								            <label class="form-check-label" for="closedDayFriday">金曜日</label>
+								        </div>
+								        <div class="form-check form-check-inline">
+								            <input type="checkbox" class="form-check-input" th:value="'土曜日'" th:field="*{closedDays}" id="closedDaySaturday">
+								            <label class="form-check-label" for="closedDaySaturday">土曜日</label>
+								        </div>
+								        <div class="form-check form-check-inline">
+								            <input type="checkbox" class="form-check-input" th:value="'日曜日'" th:field="*{closedDays}" id="closedDaySunday">
+								            <label class="form-check-label" for="closedDaySunday">日曜日</label>
+								        </div>
+								        <div class="form-check form-check-inline">
+								            <input type="checkbox" class="form-check-input" th:value="'祝日'" th:field="*{closedDays}" id="closedDayHoliday">
+								            <label class="form-check-label" for="closedDayHoliday">祝日</label>
+								        </div>
+								    </div>
 								</div>
 								
 								<div class="form-group row mb-3">

@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS restaurants (
 	capacity INT NOT NULL,
 	opening_time TIME NOT NULL,
 	closing_time TIME NOT NULL,
-	closed_days VARCHAR(50) NOT NULL,
+	closed_days JSON NOT NULL,
 	postal_code VARCHAR(50) NOT NULL,
 	address VARCHAR(255) NOT NULL,
 	phone_number VARCHAR(50) NOT NULL,

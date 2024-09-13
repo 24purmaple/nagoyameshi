@@ -43,8 +43,8 @@ public class RestaurantRegisterForm {
 	@NotNull(message = "閉店時間を入力してください。")
 	private LocalTime closingTime;
 	
-	@NotBlank(message = "定休日を入力してください。")
-	private String closedDays;
+	@NotNull(message = "定休日を入力してください。")
+	private List<String> closedDays;
 	
 	@NotBlank(message = "郵便番号を入力してください。")
 	private String postalCode;
