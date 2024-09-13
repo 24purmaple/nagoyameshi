@@ -139,7 +139,7 @@ public class AdminRestaurantController {
 	public String update(@ModelAttribute @Validated RestaurantEditForm restaurantEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 		List<Integer> categoryIds = restaurantEditForm.getCategoryIds();
 		if (categoryIds == null || categoryIds.isEmpty()) {
-	        bindingResult.addError(new FieldError("RestaurantRegisterForm", "categoryIds", "少なくとも1つのカテゴリを選択してください。"));
+	        bindingResult.addError(new FieldError("RestaurantEditForm", "categoryIds", "少なくとも1つのカテゴリを選択してください。"));
 	    }
 		
 		
