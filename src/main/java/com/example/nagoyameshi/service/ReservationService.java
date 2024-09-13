@@ -118,8 +118,4 @@ public class ReservationService {
 	    return false;
 	}
 	
-	public boolean isOpenAllYear(Restaurant restaurant) {
-	    return restaurant.getClosedDays() == null || restaurant.getClosedDays().isEmpty();
-	}
-
 }
