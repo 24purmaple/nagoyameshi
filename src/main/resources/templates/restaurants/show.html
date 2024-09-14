@@ -40,6 +40,10 @@
 										<form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/favorites/create}" id="favorite-form" class="d-none"></form>
 									</div>
 								</div>
+								<!-- 編集 -->
+								<div sec:authorize="isAuthenticated() and hasRole('ROLE_ADMIN')">
+										<a th:href="@{/admin/restaurants/__${restaurant.getId()}__/edit}">編集</a>
+								</div>
 							</div>
 							
 							<h1 class="mb-4 text-center" th:text="${restaurant.getRestaurantName()}"></h1>
