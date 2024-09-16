@@ -39,7 +39,7 @@ INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, mi
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (14, 'きしめん専門店 はるや', 'restaurant09.jpg', '名古屋の郷土料理、きしめんを存分に味わえるお店。シンプルながらも風味豊かな逸品です。', 1000, 4000, 30, '12:00', '19:30', '["全日営業"]', '460-0009', '愛知県名古屋市中区栄9-9-9', '052-9999-9999');
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (15, '味噌カレー こふく', 'restaurant10.jpg', 'こだわりの味噌とカレーが融合した絶品の味噌カレーを提供。スパイスの香りが食欲をそそります。', 2000, 5000, 35, '11:30', '20:30', '["土曜日"]', '460-0010', '愛知県名古屋市中区栄10-10-10', '052-1010-1010');
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (16, 'みそかつ亭', 'restaurant10.jpg', '名古屋の味噌かつをリーズナブルに楽しめるお店。サクサクの衣と濃厚な味噌ソースが自慢です。', 2000, 5000, 35, '11:30', '20:30', '["金曜日"]', '460-0011', '愛知県名古屋市中区栄11-11-11', '052-1111-1111');
-INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (17, '台湾小吃屋 台湾小', 'restaurant1.jpg', '台湾の風味豊かな小吃（点心）を楽しめるアットホームなお店。本場の味をご堪能ください。', 2000, 5000, 30, '11:00', '21:00', '["火曜日","木曜日"]', '460-0012', '愛知県名古屋市中区栄12-12-12', '052-1212-1212');
+INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (17, '台湾小吃屋 台湾小', 'restaurant01.jpg', '台湾の風味豊かな小吃（点心）を楽しめるアットホームなお店。本場の味をご堪能ください。', 2000, 5000, 30, '11:00', '21:00', '["火曜日","木曜日"]', '460-0012', '愛知県名古屋市中区栄12-12-12', '052-1212-1212');
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (18, '味噌串焼き 串屋', 'restaurant03.jpg', '名古屋名物の味噌串焼きが味わえるおしゃれな串焼き屋。リーズナブルでボリューム満点です。', 1000, 4000, 25, '18:00', '00:00', '["土曜日", "日曜日", "祝日"]', '460-0013', '愛知県名古屋市中区栄13-13-13', '052-1313-1313');
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (19, '手打ちうどん 一滴', 'restaurant04.jpg', 'こだわりの手打ちうどんが楽しめるお店。優しい出汁と自家製の麺が自慢です。', 1000, 4000, 40, '11:00', '20:00', '["土曜日"]', '460-0014', '愛知県名古屋市中区栄14-14-14', '052-1414-1414');
 INSERT IGNORE INTO restaurants (id, restaurant_name, image_name, description, min_price, max_price, capacity, opening_time, closing_time, closed_days, postal_code, address, phone_number) VALUES (20, '味噌カツカレー かつ善', 'restaurant05.jpg', '味噌カツとカレーの絶妙なマリアージュを楽しめるお店。ボリューム満点で大満足の一皿です。', 2000, 5000, 35, '11:30', '20:30', '["火曜日"]', '460-0015', '愛知県名古屋市中区栄15-15-15', '052-1515-1515');
@@ -63,6 +63,35 @@ INSERT IGNORE INTO categories (id, category_name) VALUES (4, 'イタリアン');
 INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (1, 1, 1);
 INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (2, 2, 2);
 INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (3, 3, 3);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (4, 4, 3);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (5, 5, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (6, 6, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (7, 7, 3);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (8, 8, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (9, 9, 4);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (10, 10, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (11, 11, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (12, 12, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (13, 13, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (14, 14, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (15, 15, 2);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (16, 16, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (17, 17, 3);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (18, 18, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (19, 19, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (20, 20, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (21, 21, 3);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (22, 22, 2);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (23, 23, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (24, 24, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (25, 25, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (26, 26, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (27, 27, 4);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (28, 28, 1);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (29, 29, 3);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (30, 29, 4);
+INSERT IGNORE INTO restaurant_categories (id, restaurant_id, category_id) VALUES (31, 1, 2);
+
 
 -- reviewテーブルにデータを挿入
 INSERT IGNORE INTO reviews (id, user_id, restaurant_id, score, comment) VALUES (2, 3, 1, 3, '普通の味でした。');

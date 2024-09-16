@@ -87,4 +87,9 @@ public class HomeController {
 			
 		return "redirect:/company";
 	}
+	
+	@GetMapping("/policy")
+	public String policy(HttpSession session) {
+	    return "/policy/index";
+	}
 }

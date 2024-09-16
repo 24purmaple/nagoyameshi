@@ -65,10 +65,14 @@ public class RestaurantService {
 		List<Integer> categoryIds = restaurantRegisterForm.getCategoryIds();
 		for(Integer categoryId : categoryIds) {
 			Category category = categoryRepository.getReferenceById(categoryId);
-			RestaurantCategory restaurantCategory = new RestaurantCategory();
-			restaurantCategory.setRestaurant(restaurant);
-			restaurantCategory.setCategory(category);
-			restaurantCategoryRepository.save(restaurantCategory);
+			 // 重複確認
+	        boolean exists = restaurantCategoryRepository.existsByRestaurantAndCategory(restaurant, category);
+	        if(!exists) {
+				RestaurantCategory restaurantCategory = new RestaurantCategory();
+				restaurantCategory.setRestaurant(restaurant);
+				restaurantCategory.setCategory(category);
+				restaurantCategoryRepository.save(restaurantCategory);
+	        }
 		}
 				
 	}
@@ -108,10 +112,13 @@ public class RestaurantService {
 		List<Integer> categoryIds = restaurantEditForm.getCategoryIds();
 		for(Integer categoryId : categoryIds) {
 			Category category = categoryRepository.getReferenceById(categoryId);
-			RestaurantCategory restaurantCategory = new RestaurantCategory();
-			restaurantCategory.setRestaurant(restaurant);
-			restaurantCategory.setCategory(category);
-			restaurantCategoryRepository.save(restaurantCategory);
+			boolean exists = restaurantCategoryRepository.existsByRestaurantAndCategory(restaurant, category);
+	        if(!exists) {
+				RestaurantCategory restaurantCategory = new RestaurantCategory();
+				restaurantCategory.setRestaurant(restaurant);
+				restaurantCategory.setCategory(category);
+				restaurantCategoryRepository.save(restaurantCategory);
+	        }
 		}
 		
 	}

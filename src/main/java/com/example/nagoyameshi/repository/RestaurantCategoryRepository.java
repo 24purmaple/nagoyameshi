@@ -31,4 +31,6 @@ public interface RestaurantCategoryRepository extends JpaRepository<RestaurantCa
 	public void deleteByRestaurant(Restaurant restaurant);
 	//カテゴリを削除する
 	public void deleteByCategory(Category category);
+	
+	public boolean existsByRestaurantAndCategory(Restaurant restaurant, Category category);
 }
