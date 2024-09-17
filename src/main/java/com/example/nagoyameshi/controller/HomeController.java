@@ -45,7 +45,7 @@ public class HomeController {
 	public String company(Model model) {
 		Company company = companyRepository.getReferenceById(1); // 会社情報を取得するサービス
 	    model.addAttribute("company", company);
-	    return "/company/index";
+	    return "company/index";
 	}
 	//会社概要編集ページ
 	@GetMapping("/company/edit")
@@ -90,6 +90,6 @@ public class HomeController {
 	
 	@GetMapping("/policy")
 	public String policy(HttpSession session) {
-	    return "/policy/index";
+	    return "policy/index";
 	}
 }
